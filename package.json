@@ -3,10 +3,12 @@
 	"version": "1.0.0",
 	"scripts": {
 		"start": "concurrently \"npm run server\" \"npm run client\"",
-		"server": "cd server && node index.js",
+		"server": "cd server && node server.js",
 		"client": "cd client && npm start"
 	},
 	"dependencies": {
-		"concurrently": "^9.1.0"
+		"concurrently": "^9.1.0",
+		"dotenv": "^16.4.7",
+		"firebase-admin": "^13.0.1"
 	}
 }
