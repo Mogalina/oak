@@ -63,7 +63,12 @@ export async function getAllUsersController(req, res) {
  * @returns {Promise<void>} A Promise resolving when the response is sent.
  */
 export async function createUserController(req, res) {
-    const userData = req.body;
+    const userData = {
+        ...req.body,
+        username: req.body.username?.trim(),
+        email: req.body.email?.trim(),
+        password: req.body.password?.trim(),
+    };
 
     const usernameValidation = validateUsername(userData.username);
     if (usernameValidation.error) {
@@ -146,7 +151,12 @@ export async function getUserByIdController(req, res) {
  */
 export async function updateUserController(req, res) {
     const { userId } = req.params;
-    const updatedData = req.body;
+    const updatedData = {
+        ...req.body,
+        username: req.body.username?.trim(),
+        email: req.body.email?.trim(),
+        password: req.body.password?.trim(),
+    };
 
     if (updatedData.username) {
         const usernameValidation = validateUsername(updatedData.username);

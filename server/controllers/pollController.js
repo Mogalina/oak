@@ -15,9 +15,10 @@
  * - POST   /api/polls/:pollId/vote/:valueName - Increment the vote count for a specific poll value.
  * 
  * Dependencies:
- * - express:           A web framework used for handling HTTP requests.
- * - ../models/poll.js: Contains utility functions for interacting with Firestore to manage poll 
- *                      data.
+ * - express:                                   A web framework used for handling HTTP requests.
+ * - ../models/poll.js:                         Contains utility functions for interacting with 
+ *                                              Firestore to manage poll data.
+ * ../middleware/validations/pollValidation.js: Contains functions to validate poll data.
  * 
  * Author: Moghioros Eric
  * Date: 2024/12/11
@@ -32,6 +33,12 @@ import {
     getAllPollsByCreator,
     voteForPollValue
 } from '../models/poll.js';
+import {
+    validateValuesCount,
+    validateTopicsCount,
+    validateQuestion,
+    validateDescription
+} from '../middleware/validations/pollValidation.js';
 
 /**
  * Controller to handle creating a new poll.
@@ -42,7 +49,47 @@ import {
  */
 export async function createPollController(req, res) {
     try {
-        const pollData = req.body;
+        const pollData = {
+            ...req.body,
+            question: req.body.question?.trim(),
+            description: req.body.description?.trim(),
+            values: Object.fromEntries(
+                Object.entries(req.body.values).map(([key, value]) => [key.trim(), value])
+            ),
+            topics: req.body.topics?.map(topic => topic.trim()),
+        };
+
+        const valuesCountValidation = validateValuesCount(Object.keys(pollData.values).length);
+        if (valuesCountValidation.error) {
+            return res.status(400).json({
+                message: "Poll validation failed",
+                errors: valuesCountValidation.error.details.map((detail) => detail.message),
+            });
+        }
+
+        const topicsCountValidation = validateTopicsCount(pollData.topics.length);
+        if (topicsCountValidation.error) {
+            return res.status(400).json({
+                message: "Poll validation failed",
+                errors: topicsCountValidation.error.details.map((detail) => detail.message),
+            });
+        }
+
+        const questionValidation = validateQuestion(pollData.question);
+        if (questionValidation.error) {
+            return res.status(400).json({
+                message: "Poll validation failed",
+                errors: questionValidation.error.details.map((detail) => detail.message),
+            });
+        }
+
+        const descriptionValidation = validateDescription(pollData.description);
+        if (descriptionValidation.error) {
+            return res.status(400).json({
+                message: "Poll validation failed",
+                errors: descriptionValidation.error.details.map((detail) => detail.message),
+            });
+        }
 
         const formattedValues = {};
         pollData.values.forEach(value => {

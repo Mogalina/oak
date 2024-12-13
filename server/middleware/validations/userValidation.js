@@ -3,9 +3,6 @@
  * 
  * This file contains validation logic for user-related operations using Joi.
  * 
- * The `validateUser` function ensures that the provided user data adheres to the required 
- * structure and constraints before being processed or saved to the database.
- * 
  * Validations:
  * - username: Must be a string between 3 and 30 characters, consisting only of alphanumeric 
  *               characters and underscores.
@@ -31,14 +28,14 @@ export const validateUsername = (username) => {
     const schema = Joi.string()
         .min(3)
         .max(30)
-        .regex(/^[a-zA-Z0-9_]+$/)
+        .regex(/^[a-zA-Z0-9_-]+$/)
         .required()
         .messages({
             "string.base":         "Username must be a string",
             "string.empty":        "Username is required",
             "string.min":          "Username must be at least 3 characters",
             "string.max":          "Username cannot exceed 30 characters",
-            "string.pattern.base": "Username can only contain characters from [a-zA-Z0-9_]",
+            "string.pattern.base": "Username can only contain characters from [a-zA-Z0-9_-]",
         });
 
     return schema.validate(username);

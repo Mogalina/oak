@@ -13,9 +13,10 @@
  * - DELETE /api/topics/:topicId   - Delete a topic.
  * 
  * Dependencies:
- * - express:            Web framework used for handling HTTP requests.
- * - ../models/topic.js: Contains utility functions for interacting with Firestore to manage 
- *                       topic data.
+ * - express:                                   Web framework used for handling HTTP requests.
+ * - ../models/topic.js:                        Contains utility functions for interacting with 
+ *                                              Firestore to manage topic data.
+ * ../middleware/validations/pollValidation.js: Contains functions to validate poll data.
  * 
  * Author: Moghioros Eric
  * Date: 2024/12/11
@@ -28,6 +29,7 @@ import {
     updateTopic, 
     deleteTopicById 
 } from '../models/topic.js';
+import { validateName } from '../middleware/validations/topicValidation.js';
 
 /**
  * Controller to handle creating a new topic.
@@ -38,7 +40,19 @@ import {
  */
 export async function createTopicController(req, res) {
     try {
-        const topicData = req.body;
+        const topicData = {
+            ...req.body,
+            name: req.body.name?.trim(),
+        };
+
+        const nameValidation = validateName(topicData.name);
+        if (nameValidation.error) {
+            return res.status(400).json({
+                message: "Topic validation failed",
+                errors: nameValidation.error.details.map((detail) => detail.message),
+            });
+        }
+
         const createdTopic = await createTopic(topicData);
 
         res.status(201).json({
@@ -110,7 +124,20 @@ export async function getTopicByIdController(req, res) {
 export async function updateTopicController(req, res) {
     try {
         const { topicId } = req.params;
-        const updatedData = req.body;
+        const updatedData = {
+            ...req.body,
+            name: req.body.name.trim(),
+        }
+
+        if (updatedData.name) {
+            const nameValidation = validateName(topicData.name);
+            if (nameValidation.error) {
+                return res.status(400).json({
+                    message: "Topic validation failed",
+                    errors: nameValidation.error.details.map((detail) => detail.message),
+                });
+            }
+        }
 
         await updateTopic(topicId, updatedData);
 
