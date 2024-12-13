@@ -53,7 +53,11 @@ export async function registerUser(email, password) {
 export async function loginUser(email, password) {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        return userCredential.user;
+        const token = await userCredential.user.getIdToken();
+        return {
+            user: userCredential.user,
+            token, 
+        };
     } catch (error) {
         throw new Error(`Login failed: ${error.message}`);
     }

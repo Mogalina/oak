@@ -13,9 +13,10 @@
  * - DELETE /api/topics/:topicId   - Delete a topic.
  * 
  * Dependencies:
- * - express:         Web framework used to define and manage HTTP routes.
- * - topicController: Contains the controller functions to perform topic operations.
- * - authentication:  Middleware for authenticating requests via JWT.
+ * - express:                              Web framework used to define and manage HTTP routes.
+ * - topicController:                      Contains the controller functions to perform topic 
+ *                                         operations.
+ * - ../middleware/auth/authMiddleware.js: Middleware for authenticating requests via JWT.
  * 
  * Author: Moghioros Eric
  * Date: 2024/12/11
@@ -29,24 +30,25 @@ import {
     deleteTopicByIdController,
     getAllTopicsController
 } from '../controllers/topicController.js';
+import { authenticate } from '../middleware/auth/authMiddleware.js';
 
 // Initialize the router for topic routes
 const router = express.Router();
 
 // Route for retrieving all topics
-router.get('/topics', getAllTopicsController);
+router.get('/topics', authenticate, getAllTopicsController);
 
 // Route for creating a new topic
-router.post('/topics', createTopicController);
+router.post('/topics', authenticate, createTopicController);
 
 // Route for retrieving a topic by its unique ID
-router.get('/topics/:topicId', getTopicByIdController);
+router.get('/topics/:topicId', authenticate, getTopicByIdController);
 
 // Route for updating topic data based on topic ID
-router.put('/topics/:topicId', updateTopicController);
+router.put('/topics/:topicId', authenticate, updateTopicController);
 
 // Route for deleting a topic based on topic ID
-router.delete('/topics/:topicId', deleteTopicByIdController);
+router.delete('/topics/:topicId', authenticate, deleteTopicByIdController);
 
 // Export the router to be used in other parts of the application
 export default router;

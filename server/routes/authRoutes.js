@@ -11,8 +11,9 @@
  * - POST /api/auth/logout   - Logout the current user.
  * 
  * Dependencies:
- * - express:                          Web framework used to define and manage HTTP routes.
- * - ../controllers/authController.js: Contains the controller functions for user authentication.
+ * - express:                              Web framework used to define and manage HTTP routes.
+ * - ../controllers/authController.js:     Contains the controller functions for user auth.
+ * - ../middleware/auth/authMiddleware.js: Middleware for authenticating requests via JWT.
  * 
  * Author: Moghioros Eric
  * Date: 2024/12/11
@@ -24,6 +25,7 @@ import {
     login, 
     logout 
 } from '../controllers/authController.js';
+import { authenticate } from '../middleware/auth/authMiddleware.js';
 
 const router = express.Router();
 
@@ -34,7 +36,7 @@ router.post('/auth/register', register);
 router.post('/auth/login', login);
 
 // Route for logging out a user
-router.post('/auth/logout', logout);
+router.post('/auth/logout', authenticate, logout);
 
 // Export the router to be used in other parts of the application
 export default router;
