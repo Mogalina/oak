@@ -105,22 +105,26 @@ export async function getUserById(userId) {
  * 
  * @param {string} userId      - The ID of the user to be updated.
  * @param {Object} updatedData - The updated user data to be saved.
- * @returns {Promise<void>} Resolves if the update is successful.
+ * @returns {Promise<Object>} The updated user data.
  * @throws {Error} If the operation fails.
  */
 export async function updateUser(userId, updatedData) {
     try {
         const userRef = db.collection('users').doc(userId);
 
-        if (updatedData.topics) {
-            updatedData.topics = updatedData.topics.map(id =>
+        const filteredData = Object.fromEntries(
+            Object.entries(updatedData).filter(([key, value]) => value !== undefined)
+        );
+
+        if (filteredData.topics) {
+            filteredData.topics = filteredData.topics.map(id =>
                 db.collection('topics').doc(id)
             );
         }
 
-        await userRef.update(updatedData);
+        await userRef.update(filteredData);
     } catch (error) {
-        throw new Error('Failed to update user');
+        throw new Error(error);
     }
 }
 
@@ -150,36 +154,41 @@ export async function deleteUserById(userId) {
 
 /**
  * Checks if a user with the given username or email already exists in the database.
+ * Both fields are optional, and only the provided fields will be checked for existence.
  * 
- * @param {string} username - The username to check.
- * @param {string} email    - The email to check.
- * @returns {Promise<Object>} An object indicating if the user exists and details about the conflict.
+ * @param {string} [username] - The username to check (optional).
+ * @param {string} [email]    - The email to check (optional).
+ * @returns {Promise<Object>} Object indicating if the user exists and details about the conflict.
  * @throws {Error} If the operation fails.
  */
 export const checkUserExists = async (username, email) => {
     try {
-        const usernameQuery = await db.collection('users')
-            .where('username', '==', username)
-            .get();
+        if (username) {
+            const usernameQuery = await db.collection('users')
+                .where('username', '==', username)
+                .get();
 
-        if (!usernameQuery.empty) {
-            return { 
-                exists: true, 
-                field: 'username', 
-                message: 'Username already exists',
-            };
+            if (!usernameQuery.empty) {
+                return { 
+                    exists: true, 
+                    field: 'username', 
+                    message: 'Username already exists',
+                };
+            }
         }
 
-        const emailQuery = await db.collection('users')
-            .where('email', '==', email)
-            .get();
+        if (email) {
+            const emailQuery = await db.collection('users')
+                .where('email', '==', email)
+                .get();
 
-        if (!emailQuery.empty) {
-            return { 
-                exists: true, 
-                field: 'email', 
-                message: 'Email already exists',
-            };
+            if (!emailQuery.empty) {
+                return { 
+                    exists: true, 
+                    field: 'email', 
+                    message: 'Email already exists',
+                };
+            }
         }
 
         return { exists: false }; 

@@ -17,6 +17,7 @@
  * - ../models/user.js:                         Contains utility functions for interacting with 
  *                                              Firestore to manage user data.
  * ../middleware/validations/userValidation.js: Contains functions to validate user data.
+ * ../utils/passwordUtils.js:                   Contains utility functions for password hashing.
  * 
  * Author: Moghioros Eric
  * Date: 2024/12/11
@@ -35,6 +36,7 @@ import {
     validateEmail, 
     validatePassword  
 } from '../middleware/validations/userValidation.js';
+import { hashPassword } from '../utils/passwordUtils.js';
 
 /**
  * Controller to handle retrieving all users.
@@ -63,7 +65,7 @@ export async function getAllUsersController(req, res) {
  * @returns {Promise<void>} A Promise resolving when the response is sent.
  */
 export async function createUserController(req, res) {
-    const userData = {
+    let userData = {
         ...req.body,
         username: req.body.username?.trim(),
         email: req.body.email?.trim(),
@@ -102,6 +104,12 @@ export async function createUserController(req, res) {
                 field: userExists.field,
             });
         }
+
+        const hashedPassword = await hashPassword(userData.password);
+        userData = {
+            ...userData,
+            password: hashedPassword,
+        };
 
         const createdUser = await createUser(userData);
         res.status(201).json({
@@ -151,7 +159,7 @@ export async function getUserByIdController(req, res) {
  */
 export async function updateUserController(req, res) {
     const { userId } = req.params;
-    const updatedData = {
+    let updatedData = {
         ...req.body,
         username: req.body.username?.trim(),
         email: req.body.email?.trim(),
@@ -195,6 +203,14 @@ export async function updateUserController(req, res) {
                 message: userExists.message,
                 field: userExists.field,
             });
+        }
+
+        if (updatedData.password) {
+            const hashedPassword = await hashPassword(updatedData.password);
+            updatedData = {
+                ...updatedData,
+                password: hashedPassword,
+            };
         }
 
         await updateUser(userId, updatedData);
