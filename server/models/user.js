@@ -6,15 +6,13 @@
  * 
  * Functions include creating, retrieving, updating, and deleting users in the Firestore database.
  * 
- * The file utilizes Firebase Admin SDK to interact with Firestore and performs operations based on
- * user data.
- * 
  * Operations:
  * - getAllUsers:    Retrieves all users from the database.
  * - createUser:     Adds a new user to the database.
  * - getUserById:    Retrieves a user by their unique ID.
  * - updateUser:     Updates user data based on the provided user ID.
  * - deleteUserById: Deletes a user based on the provided user ID.
+ * - checkUserExists: Checks if a username or email already exists in the database.
  * 
  * Dependencies:
  * - firebase-admin: Firebase Admin SDK to interact with Firestore.
@@ -58,16 +56,16 @@ export async function getAllUsers() {
  */
 export async function createUser(userData) {
     try {
-        const topicsRefs = userRef.topics.map(id =>
+        const topicsRefs = userData.topics.map(id =>
             db.collection('topics').doc(id)
         );
 
-        const formatedUserData = {
+        const formattedUserData = {
             ...userData,
             topics: topicsRefs,
-        }
+        };
 
-        const userRef = await db.collection('users').add(formatedUserData);
+        const userRef = await db.collection('users').add(formattedUserData);
 
         const savedUser = await userRef.get();
         return {
@@ -149,3 +147,43 @@ export async function deleteUserById(userId) {
         throw new Error('Failed to delete user');
     }
 }
+
+/**
+ * Checks if a user with the given username or email already exists in the database.
+ * 
+ * @param {string} username - The username to check.
+ * @param {string} email    - The email to check.
+ * @returns {Promise<Object>} An object indicating if the user exists and details about the conflict.
+ * @throws {Error} If the operation fails.
+ */
+export const checkUserExists = async (username, email) => {
+    try {
+        const usernameQuery = await db.collection('users')
+            .where('username', '==', username)
+            .get();
+
+        if (!usernameQuery.empty) {
+            return { 
+                exists: true, 
+                field: 'username', 
+                message: 'Username already exists',
+            };
+        }
+
+        const emailQuery = await db.collection('users')
+            .where('email', '==', email)
+            .get();
+
+        if (!emailQuery.empty) {
+            return { 
+                exists: true, 
+                field: 'email', 
+                message: 'Email already exists',
+            };
+        }
+
+        return { exists: false }; 
+    } catch (error) {
+        throw new Error('Failed to verify user existence');
+    }
+};
