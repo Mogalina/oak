@@ -2,3 +2,15 @@
 /node_modules
 /.pnp
 .pnp.js
+
+# Ignore local environment files
+.firebase/
+
+# Ignore Firebase emulator and other auto-generated directories
+.emulator/
+
+# Ignore files related to Firebase Hosting
+apphosting.yaml
+
+# Firebase Realtime Database rules if not using Realtime Database
+database.rules.json

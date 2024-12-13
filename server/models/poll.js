@@ -25,7 +25,7 @@
  * Date: 2024/12/12
  */
 
-import db from '../firebase/firebase.js';
+import { db } from '../firebase/firebase.js';
 
 /**
  * Retrieves all polls from the collection.

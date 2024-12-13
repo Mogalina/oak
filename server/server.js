@@ -16,6 +16,9 @@
  * - body-parser: Middleware to parse incoming JSON request bodies.
  * - dotenv: 	  Loads environment variables from a `.env` file.
  * - userRoutes:  The route handlers for user-related operations.
+ * - pollRoutes:  The route handlers for poll-related operations.
+ * - topicRoutes: The route handlers for topic-related operations.
+ * - authRoutes:  The route handlers for auth-related operations.
  * 
  * Author: Moghioros Eric
  * Date: 2024/12/11
@@ -27,6 +30,7 @@ import bodyParser from 'body-parser';
 import userRoutes from './routes/userRoutes.js';
 import pollRoutes from './routes/pollRoutes.js';
 import topicRoutes from './routes/topicRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 import dotenv from 'dotenv';
 
 // Load environment variables from .env file
@@ -50,6 +54,7 @@ app.use(bodyParser.json());
 app.use('/api', userRoutes);
 app.use('/api', pollRoutes);
 app.use('/api', topicRoutes);
+app.use('/api', authRoutes);
 
 // Start the server and listen on the specified port
 app.listen(port, () => {

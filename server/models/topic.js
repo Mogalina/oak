@@ -23,7 +23,7 @@
  * Date: 2024/12/11
  */
 
-import db from '../firebase/firebase.js';
+import { db } from '../firebase/firebase.js';
 
 /**
  * Creates a new topic in the database.
