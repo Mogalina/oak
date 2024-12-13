@@ -6,9 +6,10 @@
  * The controller functions handle HTTP requests to CRUD operations on users.
  * 
  * Routes handled by this file:
- * - POST /api/users           - Create a new user.
- * - GET /api/users/:userId    - Get user by ID.
- * - PUT /api/users/:userId    - Update user details.
+ * - GET    /api/users         - Get all users.
+ * - POST   /api/users         - Create a new user.
+ * - GET    /api/users/:userId - Get user by ID.
+ * - PUT    /api/users/:userId - Update user details.
  * - DELETE /api/users/:userId - Delete a user.
  * 
  * Dependencies:
@@ -20,30 +21,53 @@
  * Date: 2024/12/11
  */
 
-import { createUser, getUserById, updateUser, deleteUserById } from '../models/user.js';
+import { 
+    getAllUsers, 
+    createUser, 
+    getUserById, 
+    updateUser, 
+    deleteUserById 
+} from '../models/user.js';
+
+/**
+ * Controller to handle retrieving all users.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object to send the response.
+ * @returns {Promise<void>} A Promise resolving when the response is sent.
+ */
+export async function getAllUsersController(req, res) {
+    try {
+        const users = await getAllUsers();
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Error retrieving users:', error);
+        res.status(500).json({
+            message: 'Failed to retrieve users',
+        });
+    }
+}
 
 /**
  * Controller to handle creating a new user.
  * 
  * @param {Object} req - The request object, containing the user's data in the body.
  * @param {Object} res - The response object to send the response.
- * @returns {Object} The response with status code and the created user data.
+ * @returns {Promise<void>} A Promise resolving when the response is sent.
  */
 export async function createUserController(req, res) {
+    const userData = req.body;
+
     try {
-        const { username, email, password, topics } = req.body;
-
-        const { userId, userData } = createUser({ username, email, password, topics });
-
+        const createdUser = await createUser(userData);
         res.status(201).json({
             message: 'User created successfully',
-            userId,
-            userData,
+            ...createdUser,
         });
     } catch (error) {
         console.error('Error creating user:', error);
         res.status(500).json({
-            message: 'Error creating user',
+            message: 'Failed to create user',
         });
     }
 }
@@ -53,19 +77,24 @@ export async function createUserController(req, res) {
  * 
  * @param {Object} req - The request object, containing the user ID in the params.
  * @param {Object} res - The response object to send the response.
- * @returns {Object} The response with status code and the user's data.
+ * @returns {Promise<void>} A Promise resolving when the response is sent.
  */
 export async function getUserByIdController(req, res) {
-    try {
-        const { userId } = req.params;
+    const { userId } = req.params;
 
+    try {
         const userData = await getUserById(userId);
+        if (!userData) {
+            return res.status(404).json({
+                message: 'User not found',
+            });
+        }
 
         res.status(200).json(userData);
     } catch (error) {
-        console.error('Error reading user:', error);
-        res.status(404).json({
-            message: 'User not found',
+        console.error('Error retrieving user:', error);
+        res.status(500).json({
+            message: 'Failed to retrieve user',
         });
     }
 }
@@ -76,24 +105,22 @@ export async function getUserByIdController(req, res) {
  * @param {Object} req - The request object, containing the user ID in the params and updated data 
  *                       in the body.
  * @param {Object} res - The response object to send the response.
- * @returns {Object} The response with status code and the updated user's data.
+ * @returns {Promise<void>} A Promise resolving when the response is sent.
  */
 export async function updateUserController(req, res) {
+    const { userId } = req.params;
+    const updatedData = req.body;
+
     try {
-        const { userId } = req.params;
-        const { updatedData } = req.body;
-
-        const updatedUserData = updateUser(userId, updatedData);
-
+        await updateUser(userId, updatedData);
         res.status(200).json({
             message: 'User updated successfully',
-            userId,
-            updatedUserData,
+            updatedData,
         });
     } catch (error) {
         console.error('Error updating user:', error);
         res.status(500).json({
-            message: 'Error updating user',
+            message: 'Failed to update user',
         });
     }
 }
@@ -103,19 +130,26 @@ export async function updateUserController(req, res) {
  * 
  * @param {Object} req - The request object, containing the user ID in the params.
  * @param {Object} res - The response object to send the response.
- * @returns {Object} The response with status code.
+ * @returns {Promise<void>} A Promise resolving when the response is sent.
  */
 export async function deleteUserByIdController(req, res) {
+    const { userId } = req.params;
+
     try {
-        const { userId } = req.params;
+        const message = await deleteUserById(userId);
+        if (message === 'User not found') {
+            return res.status(404).json({
+                message: message,
+            });
+        }
 
-        const result = deleteUserById(userId);
-
-        res.status(200).json(result);
+        res.status(200).json({
+            message,
+        });
     } catch (error) {
         console.error('Error deleting user:', error);
         res.status(500).json({
-            message: 'Error deleting user',
+            message: 'Failed to delete user',
         });
     }
 }

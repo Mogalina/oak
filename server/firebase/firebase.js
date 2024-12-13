@@ -16,7 +16,7 @@
  */
 
 import admin from 'firebase-admin';
-import adminKey from '../../firebase-admin-key.json' assert { type: 'json' };
+import adminKey from '../firebase-admin-key.json' assert { type: 'json' };
 
 // Ensure Firebase Admin SDK is initialized properly
 admin.initializeApp({

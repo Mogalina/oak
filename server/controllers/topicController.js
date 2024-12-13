@@ -6,10 +6,11 @@
  * The controller functions handle HTTP requests to CRUD operations on topics.
  * 
  * Routes handled by this file:
- * - POST /api/topics            - Create a new topic.
- * - GET /api/topics/:topicId    - Retrieve a topic by its unique ID.
- * - PUT /api/topics/:topicId    - Update a topic's details.
- * - DELETE /api/topics/:topicId - Delete a topic.
+ * - POST   /api/topics            - Create a new topic.
+ * - GET    /api/topics            - Retrieve all topics.
+ * - GET    /api/topics/:topicId   - Retrieve a topic by its unique ID.
+ * - PUT    /api/topics/:topicId   - Update a topic's details.
+ * - DELETE /api/topics/:topicId   - Delete a topic.
  * 
  * Dependencies:
  * - express:            Web framework used for handling HTTP requests.
@@ -20,30 +21,53 @@
  * Date: 2024/12/11
  */
 
-import { createTopic, getTopicById, updateTopic, deleteTopicById } from '../models/topic.js';
+import { 
+    createTopic, 
+    getAllTopics, 
+    getTopicById, 
+    updateTopic, 
+    deleteTopicById 
+} from '../models/topic.js';
 
 /**
  * Controller to handle creating a new topic.
  * 
  * @param {Object} req - The request object, containing the topic data in the body.
  * @param {Object} res - The response object to send the response.
- * @returns {Object} The response with status code and the created topic data.
+ * @returns {Promise<void>} A Promise resolving when the response is sent.
  */
 export async function createTopicController(req, res) {
     try {
-        const { name, description } = req.body;
-
-        const { topicId, topicData } = await createTopic({ name, description });
+        const topicData = req.body;
+        const createdTopic = await createTopic(topicData);
 
         res.status(201).json({
             message: 'Topic created successfully',
-            topicId,
-            topicData,
+            ...createdTopic,
         });
     } catch (error) {
         console.error('Error creating topic:', error);
         res.status(500).json({
-            message: 'Error creating topic',
+            message: 'Failed to create topic',
+        });
+    }
+}
+
+/**
+ * Controller to handle retrieving all topics.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object to send the response.
+ * @returns {Promise<void>} A Promise resolving when the response is sent.
+ */
+export async function getAllTopicsController(req, res) {
+    try {
+        const topics = await getAllTopics();
+        res.status(200).json(topics);
+    } catch (error) {
+        console.error('Error retrieving topics:', error);
+        res.status(500).json({
+            message: 'Failed to retrieve topics',
         });
     }
 }
@@ -53,19 +77,24 @@ export async function createTopicController(req, res) {
  * 
  * @param {Object} req - The request object, containing the topic ID in the params.
  * @param {Object} res - The response object to send the response.
- * @returns {Object} The response with status code and the topic's data.
+ * @returns {Promise<void>} A Promise resolving when the response is sent.
  */
 export async function getTopicByIdController(req, res) {
     try {
         const { topicId } = req.params;
-
         const topicData = await getTopicById(topicId);
+
+        if (!topicData) {
+            return res.status(404).json({
+                message: 'Topic not found',
+            });
+        }
 
         res.status(200).json(topicData);
     } catch (error) {
-        console.error('Error reading topic:', error);
-        res.status(404).json({
-            message: 'Topic not found',
+        console.error('Error retrieving topic:', error);
+        res.status(500).json({
+            message: 'Failed to retrieve topic',
         });
     }
 }
@@ -76,24 +105,23 @@ export async function getTopicByIdController(req, res) {
  * @param {Object} req - The request object, containing the topic ID in the params and updated 
  *                       data in the body.
  * @param {Object} res - The response object to send the response.
- * @returns {Object} The response with status code and the updated topic's data.
+ * @returns {Promise<void>} A Promise resolving when the response is sent.
  */
 export async function updateTopicController(req, res) {
     try {
         const { topicId } = req.params;
-        const { updatedData } = req.body;
+        const updatedData = req.body;
 
-        const updatedTopicData = await updateTopic(topicId, updatedData);
+        await updateTopic(topicId, updatedData);
 
         res.status(200).json({
             message: 'Topic updated successfully',
-            topicId,
-            updatedTopicData,
+            updatedData
         });
     } catch (error) {
         console.error('Error updating topic:', error);
         res.status(500).json({
-            message: 'Error updating topic',
+            message: 'Failed to update topic',
         });
     }
 }
@@ -103,19 +131,26 @@ export async function updateTopicController(req, res) {
  * 
  * @param {Object} req - The request object, containing the topic ID in the params.
  * @param {Object} res - The response object to send the response.
- * @returns {Object} The response with status code.
+ * @returns {Promise<void>} A Promise resolving when the response is sent.
  */
 export async function deleteTopicByIdController(req, res) {
     try {
         const { topicId } = req.params;
 
-        const result = await deleteTopicById(topicId);
+        const message = await deleteTopicById(topicId);
+        if (message === 'Topic not found') {
+            return res.status(404).json({
+                message: message,
+            });
+        }
 
-        res.status(200).json(result);
+        res.status(200).json({
+            message: 'Topic deleted successfully',
+        });
     } catch (error) {
         console.error('Error deleting topic:', error);
         res.status(500).json({
-            message: 'Error deleting topic',
+            message: 'Failed to delete topic',
         });
     }
 }

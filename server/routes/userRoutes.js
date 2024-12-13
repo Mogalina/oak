@@ -6,14 +6,16 @@
  * It handles HTTP requests for CRUD operations on users.
  * 
  * Routes handled by this file:
- * - POST /api/users           - Create a new user.
- * - GET /api/users/:userId    - Retrieve a user by their unique ID.
- * - PUT /api/users/:userId    - Update a user's data.
+ * - GET    /api/users         - Get all users.
+ * - POST   /api/users         - Create a new user.
+ * - GET    /api/users/:userId - Retrieve a user by their unique ID.
+ * - PUT    /api/users/:userId - Update a user's data.
  * - DELETE /api/users/:userId - Delete a user by their unique ID.
  * 
  * Dependencies:
  * - express:        Web framework used to define and manage HTTP routes.
  * - userController: Contains the controller functions to perform user operations.
+ * - authentication: Middleware for authenticating requests via JWT.
  * 
  * Author: Moghioros Eric
  * Date: 2024/12/11
@@ -21,6 +23,7 @@
 
 import express from 'express';
 import { 
+    getAllUsersController,
     createUserController, 
     getUserByIdController,
     updateUserController,
@@ -29,6 +32,9 @@ import {
 
 // Initialize the router for user routes
 const router = express.Router();
+
+// Route for retrieving all users
+router.get('/users', getAllUsersController);
 
 // Route for creating a new user
 router.post('/users', createUserController);

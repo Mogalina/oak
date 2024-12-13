@@ -11,9 +11,10 @@
  * 
  * Operations:
  * - createTopic:     Adds a new topic to the database.
+ * - getAllTopics:    Retrieves all topics from the database.
  * - getTopicById:    Retrieves a topic by its unique ID.
- * - updateTopic:     Updates topic data based on the provided topic ID.
- * - deleteTopicById: Deletes a topic based on the provided topic ID.
+ * - updateTopic:     Updates topic details in the database.
+ * - deleteTopicById: Deletes a topic by its unique ID.
  * 
  * Dependencies:
  * - firebase-admin: Firebase Admin SDK to interact with Firestore.
@@ -25,71 +26,110 @@
 import db from '../firebase/firebase.js';
 
 /**
- * Creates a new topic in the collection.
+ * Creates a new topic in the database.
  * 
  * @param {Object} topicData - The data of the topic to be created.
- * @returns {string} The unique ID of the created topic.
+ * @returns {Promise<Object>} The newly created topic data with its unique ID.
+ * @throws {Error} If the operation fails.
  */
 export async function createTopic(topicData) {
     try {
         const topicRef = await db.collection('topics').add(topicData);
-        console.log('Topic created successfully');
+        const savedTopic = await topicRef.get();
 
-        return topicRef.id;
+        return {
+            id: topicRef.id,
+            ...savedTopic.data(),
+        };
     } catch (error) {
-        console.error('Error creating topic:', error);
+        throw new Error('Failed to create topic');
     }
 }
 
 /**
- * Retrieves a topic from the collection by its unique ID.
+ * Retrieves all topics from the collection.
+ * 
+ * @returns {Promise<Array<Object>>} Resolves with an array of all topic data.
+ * @throws {Error} If the operation fails.
+ */
+export async function getAllTopics() {
+    try {
+        const topicsSnapshot = await db.collection('topics').get();
+        const topics = [];
+
+        topicsSnapshot.forEach((doc) => {
+            topics.push({
+                id: doc.id,
+                ...doc.data(),
+            });
+        });
+
+        return topics;
+    } catch (error) {
+        throw new Error('Failed to retrieve topics');
+    }
+}
+
+/**
+ * Retrieves a topic from the database by its unique ID.
  * 
  * @param {string} topicId - The ID of the topic to be retrieved.
- * @returns {Object|null} The topic data if found, otherwise null if no topic is found.
+ * @returns {Promise<Object|null>} The topic data if found, otherwise null.
+ * @throws {Error} If the operation fails.
  */
 export async function getTopicById(topicId) {
     try {
         const topicDoc = await db.collection('topics').doc(topicId).get();
+
         if (topicDoc.exists) {
-            console.log('Topic data:', topicDoc.data());
-            return topicDoc.data();
+            return {
+                id: topicId,
+                ...topicDoc.data(),
+            };
         } else {
-            console.log('Topic not found');
             return null;
         }
     } catch (error) {
-        console.error('Error reading topic:', error);
+        throw new Error('Failed to retrieve topic');
     }
 }
 
 /**
- * Updates an existing topic's data in the collection.
+ * Updates an existing topic's data in the database.
  * 
  * @param {string} topicId     - The ID of the topic to be updated.
  * @param {Object} updatedData - The updated topic data to be saved.
- * @returns {void}
+ * @returns {Promise<void>} Resolves if the update is successful.
+ * @throws {Error} If the operation fails.
  */
 export async function updateTopic(topicId, updatedData) {
     try {
         const topicRef = db.collection('topics').doc(topicId);
         await topicRef.update(updatedData);
-        console.log('Topic updated successfully');
     } catch (error) {
-        console.error('Error updating topic:', error);
+        throw new Error('Failed to update topic');
     }
 }
 
 /**
- * Deletes a topic from the collection by its unique ID.
+ * Deletes a topic from the database by its unique ID.
  * 
  * @param {string} topicId - The ID of the topic to be deleted.
- * @returns {void}
+ * @returns {Promise<string>} Resolves with a success message if the topic is deleted.
+ * @throws {Error} If the operation fails.
  */
 export async function deleteTopicById(topicId) {
     try {
-        await db.collection('topics').doc(topicId).delete();
-        console.log('Topic deleted successfully');
+        const topicRef = db.collection('topics').doc(topicId);
+        const topicDoc = await topicRef.get();
+
+        if (!topicDoc.exists) {
+            return 'Topic not found';
+        }
+
+        await topicRef.delete();
+        return 'Topic deleted successfully';
     } catch (error) {
-        console.error('Error deleting topic:', error);
+        throw new Error('Failed to delete topic');
     }
 }

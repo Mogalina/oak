@@ -12,7 +12,7 @@
  * 
  * Dependencies:
  * - express: 	  Web framework to handle HTTP requests and routing.
- * - cors: 		  Middleware to enable Cross-Origin Resource Sharing.
+ * - cors: 	      Middleware to enable Cross-Origin Resource Sharing.
  * - body-parser: Middleware to parse incoming JSON request bodies.
  * - dotenv: 	  Loads environment variables from a `.env` file.
  * - userRoutes:  The route handlers for user-related operations.
@@ -37,9 +37,6 @@ const app = express();
 
 // Get port from environment variables
 const port = process.env.PORT;
-
-// Enable CORS for all domains
-app.use(cors());
 
 // Enable CORS for specific domain
 app.use(cors({

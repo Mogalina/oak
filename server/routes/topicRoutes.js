@@ -6,14 +6,16 @@
  * It handles HTTP requests for CRUD operations on topics.
  * 
  * Routes handled by this file:
- * - POST /api/topics            - Create a new topic.
- * - GET /api/topics/:topicId    - Retrieve a topic by its unique ID.
- * - PUT /api/topics/:topicId    - Update a topic's details.
- * - DELETE /api/topics/:topicId - Delete a topic.
+ * - POST   /api/topics            - Create a new topic.
+ * - GET    /api/topics            - Retrieve all topics.
+ * - GET    /api/topics/:topicId   - Retrieve a topic by its unique ID.
+ * - PUT    /api/topics/:topicId   - Update a topic's details.
+ * - DELETE /api/topics/:topicId   - Delete a topic.
  * 
  * Dependencies:
- * - express:        Web framework used to define and manage HTTP routes.
+ * - express:         Web framework used to define and manage HTTP routes.
  * - topicController: Contains the controller functions to perform topic operations.
+ * - authentication:  Middleware for authenticating requests via JWT.
  * 
  * Author: Moghioros Eric
  * Date: 2024/12/11
@@ -25,10 +27,14 @@ import {
     getTopicByIdController,
     updateTopicController,
     deleteTopicByIdController,
+    getAllTopicsController
 } from '../controllers/topicController.js';
 
 // Initialize the router for topic routes
 const router = express.Router();
+
+// Route for retrieving all topics
+router.get('/topics', getAllTopicsController);
 
 // Route for creating a new topic
 router.post('/topics', createTopicController);
