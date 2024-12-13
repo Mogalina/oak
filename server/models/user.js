@@ -124,7 +124,7 @@ export async function updateUser(userId, updatedData) {
 
         await userRef.update(filteredData);
     } catch (error) {
-        throw new Error(error);
+        throw new Error('Failed to update user');
     }
 }
 
