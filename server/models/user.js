@@ -7,11 +7,11 @@
  * Functions include creating, retrieving, updating, and deleting users in the Firestore database.
  * 
  * Operations:
- * - getAllUsers:    Retrieves all users from the database.
- * - createUser:     Adds a new user to the database.
- * - getUserById:    Retrieves a user by their unique ID.
- * - updateUser:     Updates user data based on the provided user ID.
- * - deleteUserById: Deletes a user based on the provided user ID.
+ * - getAllUsers:     Retrieves all users from the database.
+ * - createUser:      Adds a new user to the database.
+ * - getUserById:     Retrieves a user by their unique ID.
+ * - updateUser:      Updates user data based on the provided user ID.
+ * - deleteUserById:  Deletes a user based on the provided user ID.
  * - checkUserExists: Checks if a username or email already exists in the database.
  * 
  * Dependencies:
