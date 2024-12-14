@@ -60,6 +60,14 @@ export async function login(req, res) {
 
     try {
         const { user, token } = await loginUser(email, password);
+
+        res.cookie('authToken', token, {
+            httpOnly: true, 
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict', 
+            maxAge: 24 * 60 * 60 * 1000,
+        });
+
         res.status(200).json({
             message: 'Login successful',
             user,

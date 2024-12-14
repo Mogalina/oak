@@ -4,8 +4,9 @@
  * This file sets up the Express server, configures middleware, and defines the API routes.
  * 
  * Middleware included in this file:
- * - CORS: 		 Ensures that requests from the frontend can be made to the backend.
- * - bodyParser: Parses incoming JSON requests so the data is available in `req.body`.
+ * - CORS: 		   Ensures that requests from the frontend can be made to the backend.
+ * - bodyParser:   Parses incoming JSON requests so the data is available in `req.body`.
+ * - cookieParser: Parses incoming cookies.
  * 
  * Routes:
  * - /api: All routes are handled under this prefix.
@@ -32,6 +33,7 @@ import pollRoutes from './routes/pollRoutes.js';
 import topicRoutes from './routes/topicRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -49,6 +51,9 @@ app.use(cors({
 
 // Use body-parser middleware to parse JSON requests
 app.use(bodyParser.json());
+
+// Use cookie parser middleware
+app.use(cookieParser());
 
 // Use user routes for API requests
 app.use('/api', userRoutes);

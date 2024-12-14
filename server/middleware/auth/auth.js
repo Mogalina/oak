@@ -44,7 +44,7 @@ export async function registerUser(email, password) {
 }
 
 /**
- * Logs in a user with email and password.
+ * Logs in a user with email and password and sets a cookie.
  * 
  * @param {string} email    - User's email address.
  * @param {string} password - User's password.
@@ -64,13 +64,14 @@ export async function loginUser(email, password) {
 }
 
 /**
- * Logs out the current user.
+ * Logs out the current user and clears the cookie.
  * 
  * @returns {Promise<void>}
  */
 export async function logoutUser() {
     try {
         await signOut(auth);
+        document.cookie = 'authToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Strict;';
         return 'User logged out successfully.';
     } catch (error) {
         throw new Error(`Logout failed: ${error.message}`);
