@@ -1,0 +1,106 @@
+/* Imports and configuration */
+@use '../abstract/mixins' as *;
+@use '../abstract/colors' as *;
+
+/* General header styles */
+.header {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.0rem 2.0rem;
+    background-color: transparent;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+/* Logo styling */
+.header .logo h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Icon styling */
+.icon {
+    color: rgba($full-black, 0.5);
+    &:hover {
+        color: $full-black;
+    }
+}
+
+/* Logo image styling */
+.logo-image {
+    height: 24px;
+    width: 24px;
+}
+
+/* Logo link styling */
+.logo-link {
+    text-decoration: none;
+    color: $full-black;
+    font-weight: bolder;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+    font-size: 1.2rem;
+
+    span {
+        margin-bottom: 1px;
+    }
+}
+
+/* Navigation list styling */
+.nav-list {
+    list-style: none;
+    flex-direction: column;
+    display: flex;
+    gap: 0.3rem;
+    padding: 0;
+    margin: 0;
+}
+
+/* Navigation item styling */
+.nav-item {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    padding: 10px; 
+}
+
+/* Navigation link styling */
+.nav-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+/* Menu icon styling */
+.menu-icon {
+    display: block;
+    cursor: pointer;
+    color: $full-black;
+}
+
+/* Navigation container (dropdown) styling */
+.nav {
+    position: absolute; 
+    top: 100%; 
+    right: 0;
+    margin-right: 13px;
+    margin-top: -12px;
+    width: auto; 
+    background-color: transparent;
+    @include set-box-shadow;
+    padding: 1.0rem 0.5rem 1.0rem 0.5rem;
+    z-index: 1000; 
+    border-radius: 100px;
+}
+
+/* Ensure body doesn't scroll when menu is open */
+body.menu-open {
+    overflow: hidden;
+}

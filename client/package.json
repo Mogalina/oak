@@ -6,9 +6,11 @@
 		"axios": "^1.7.9",
 		"cra-template": "1.2.0",
 		"react": "^19.0.0",
+		"react-awesome-reveal": "^4.2.14",
 		"react-dom": "^19.0.0",
 		"react-router-dom": "^7.0.2",
 		"react-scripts": "5.0.1",
+		"scss": "^0.2.4",
 		"web-vitals": "^4.2.4"
 	},
 	"scripts": {
@@ -19,20 +21,20 @@
 	},
 	"eslintConfig": {
 		"extends": [
-		"react-app",
-		"react-app/jest"
+			"react-app",
+			"react-app/jest"
 		]
 	},
 	"browserslist": {
 		"production": [
-		">0.2%",
-		"not dead",
-		"not op_mini all"
+			">0.2%",
+			"not dead",
+			"not op_mini all"
 		],
 		"development": [
-		"last 1 chrome version",
-		"last 1 firefox version",
-		"last 1 safari version"
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
 		]
 	}
 }

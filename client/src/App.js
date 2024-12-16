@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+// Imports and configuration
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
+// Pages
+import HomePage from './pages/HomePage.js';
+
+/**
+ * App component that defines the routes of the application.
+ * 
+ * @returns {JSX.Element} The rendered component with routing setup.
+ */
 function App() {
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    axios.get('http://localhost:5000')
-      .then(response => setMessage(response.data))
-      .catch(error => console.error('There was an error!', error));
-  }, []);
-
-  return (
-    <div>
-      <h1>{message}</h1>
-    </div>
-  );
+	return (
+		<Router>
+			<Routes>
+				<Route path="/" element={<HomePage />} />
+			</Routes>
+		</Router>
+	);
 }
 
+// Export the App for usage across application
 export default App;

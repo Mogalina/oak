@@ -1,0 +1,9 @@
+/**
+ * Mixin to apply a standard box shadow effect.
+
+ * Usage:
+ * @include set-box-shadow;
+ */
+@mixin set-box-shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+};
