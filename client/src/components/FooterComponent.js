@@ -39,7 +39,12 @@ const FooterComponent = () => {
 	return (
 		<footer className="footer">
 			{/* Buy Me a Coffee Link */}
-			<Link to="https://buymeacoffee.com/ericmoghioros" className="logo-link">
+			<Link 
+				to="https://buymeacoffee.com/ericmoghioros" 
+				target="_blank" 
+				rel="noopener noreferrer"  
+				className="logo-link"
+			>
 				<button class="coffee-btn">
 					Buy Me a Coffee
 					<div class="icon">

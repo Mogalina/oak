@@ -1,11 +1,15 @@
+/* Imports and configuration */
 @use '../abstract/colors' as *;
 
+/* Main container for the homepage layout */
 .home-page {
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: hidden;
 };
 
+/* Container for the home intro section */
 .home-intro {
     background-image: url('../../assets/images/svgs/home-intro.svg');
     background-size: cover; 
@@ -17,8 +21,10 @@
     justify-content: center;
     align-items: top; 
     text-align: center; 
+    min-height: 800px;
 }
 
+/* Container for the home intro content */
 .home-intro-content {
     z-index: 10; 
     padding: 20px;
@@ -28,42 +34,48 @@
     gap: 2.0rem;
 }
 
+/* The motto section */
 .motto {
-    font-size: clamp(1.5rem, 7.2vw, 4.0rem);
+    font-size: clamp(1.5rem, 6.9vw, 4.0rem);
     color: $full-black;
     font-weight: bolder;
-    font-family: 'Moirai One', 'Open Sans', sans-serif;
 }
 
+/* Container for options that are displayed */
 .content-options {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 2.0rem;
+    font-family: inherit;
 }
 
+/* Styling for buttons inside the content options */
 .btn-option {
     font-size: 1rem;
     padding: 0.8em 2.0em;
     background-color: $full-black;
     border: 3px solid $full-black;
+    font-family: inherit;
     border-radius: 2.0em;
     color: rgba($pastel-white, 0.85);
     font-weight: bolder;
     transition: cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.4s;
     box-shadow: -5px 5px 0px 0px rgba($pastel-white, 0.6);
+
+    &:hover {
+        transform: translate(5px, -5px);
+        cursor: pointer;
+    }
 }
 
-.btn-option:hover {
-    transform: translate(5px, -5px);
-    cursor: pointer;
-}
-
+/* The description section */
 .home-description {
     width: 100%;
 }
 
+/* Section for creating polls */
 .home-create-polls {
     background-image: url('../../assets/images/svgs/create-polls.svg');
     background-size: cover; 
@@ -73,6 +85,7 @@
     height: 100vh;
 }
 
+/* Section for sharing opinions */
 .home-share-opinion {
     background-image: url('../../assets/images/svgs/share-opinion.svg');
     background-size: cover; 
@@ -82,6 +95,7 @@
     height: 100vh;
 }
 
+/* Section for discovering */
 .home-discover {
     background-image: url('../../assets/images/svgs/discover.svg');
     background-size: cover; 

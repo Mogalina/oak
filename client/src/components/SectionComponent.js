@@ -33,18 +33,24 @@ const SectionComponent = ({
             <div className="section-text">
                 <Fade direction="up" cascade damping={0.1} duration={1000}>
                     <h2 className="section-title">{title}</h2>
+                </Fade>
+                <Fade direction="up" cascade damping={0.1} duration={1000} delay={100}>
                     <p className="section-description">{description}</p>
                 </Fade>
             </div>
-            <button class="section-button" onClick={onButtonClick}>
-                {buttonText}
-                <div class="icon">
-                    <Icons 
-                        name="arrowRight" 
-                        size="24"
-                    />
+            <Fade direction="up" cascade damping={0.1} duration={1000} delay={200}>
+                <div>
+                    <button class="section-button" onClick={onButtonClick}>
+                        {buttonText}
+                        <div class="icon">
+                            <Icons 
+                                name="arrowRight" 
+                                size="24"
+                            />
+                        </div>
+                    </button>
                 </div>
-            </button>
+            </Fade>
         </section>
     );
 };

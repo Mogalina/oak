@@ -13,9 +13,13 @@ import '../styles/layouts/main-layout.scss';
  *
  * @param {React.ReactNode} children - The page content that will be displayed between the header 
  *                                     and footer.
- * @returns {JSX.Element} The rendered layout with header, content, and footer.
+ * @param {boolean} showFooter 	     - Determines whether to display the footer.
+ * @returns {JSX.Element} The rendered layout with header, content, and optional footer.
  */
-const MainLayout = ({ children }) => {
+const MainLayout = ({ 
+	children, 
+	showFooter = true 
+}) => {
 	return (
 		<div className="main-layout">
 			{/* Header */}
@@ -26,8 +30,8 @@ const MainLayout = ({ children }) => {
 				{children}
 			</main>
 
-			{/* Footer */}
-			<FooterComponent />
+			{/* Conditional Footer */}
+			{showFooter && <FooterComponent />}
 		</div>
 	);
 };
