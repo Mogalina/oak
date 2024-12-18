@@ -32,7 +32,7 @@ import { rateLimitMiddleware } from '../middleware/auth/rateLimitMiddleware.js';
 const router = express.Router();
 
 // Route for registering a new user
-router.post('/auth/register', register);
+router.post('/auth/register', rateLimitMiddleware, register);
 
 // Route for loggin in a user
 router.post('/auth/login', rateLimitMiddleware, login);

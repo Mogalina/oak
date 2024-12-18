@@ -27,22 +27,23 @@ import {
 /**
  * Registers a new user with email and password.
  * 
- * @param {Object} req - The request object containing the user's email and password in the body.
+ * @param {Object} req - The request object containing the user's data in the body.
  * @param {Object} res - The response object used to send a response back to the client.
  * @returns {Promise<void>} Response with the status and user data.
  */
 export async function register(req, res) {
-    const { email, password } = req.body;
+    const { username, email, password } = req.body;
 
     try {
-        const user = await registerUser(email, password);
+        const user = await registerUser(username, email, password);
         res.status(201).json({ 
-            message: 'User registered successfully',
+            message: 'User registered successfully. A verification email has been sent to your' +
+                'email address.',
             user,
         });
     } catch (error) {
         res.status(400).json({ 
-            message: error.message, 
+            message: error.message,
         });
     }
 }
@@ -73,6 +74,11 @@ export async function login(req, res) {
             token,
         });
     } catch (error) {
+        if (error.message.includes('Email not verified')) {
+            return res.status(403).json({
+                message: error.message,
+            });
+        }
         res.status(400).json({ 
             message: error.message,
         });

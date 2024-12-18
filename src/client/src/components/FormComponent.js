@@ -13,15 +13,16 @@ import '../styles/components/form-component.scss';
  * FormComponent - A reusable form component with animated transitions, dynamic fields, and 
  * customizable behaviors for form handling.
  * 
- * @param {string}   title            - The title displayed at the top of the form.
- * @param {Array}    fields           - An array of field objects containing input properties.
- * @param {Function} onSubmit         - Callback function invoked on form submission with form data.
- * @param {string}   footerText       - Text displayed in the footer.
- * @param {string}   footerLinkText   - Text for the footer link.
- * @param {string}   footerLink       - URL for the footer link.
- * @param {string}   submitButtonText - Text for the submit button.
- * @param {string}   submitButtonIcon - Icon name for the submit button.
- * @param {Object}   errors           - Validation errors to display under the form fields.
+ * @param {string}   title                - The title displayed at the top of the form.
+ * @param {Array}    fields               - An array of field objects containing input properties.
+ * @param {Function} onSubmit             - Callback function invoked on form submission with form data.
+ * @param {string}   footerText           - Text displayed in the footer.
+ * @param {string}   footerLinkText       - Text for the footer link.
+ * @param {string}   footerLink           - URL for the footer link.
+ * @param {string}   submitButtonText     - Text for the submit button.
+ * @param {string}   submitButtonIcon     - Icon name for the submit button.
+ * @param {Object}   errors               - Validation errors to display under the form fields.
+ * @param {boolean}  submitButtonDisabled - Whether the submit button should be disabled.
  * @returns {JSX.Element} The rendered form component.
  */
 const FormComponent = ({
@@ -33,7 +34,8 @@ const FormComponent = ({
     footerLink = "", 
     submitButtonText = "Submit", 
     submitButtonIcon = "chevronRight",
-    errors = {},  
+    errors = {},
+    submitButtonDisabled = false, 
 }) => {
     // State to manage form data dynamically based on provided fields
     const [formData, setFormData] = useState(
@@ -125,7 +127,11 @@ const FormComponent = ({
                         delay={150 * (fields.length + 1)}
                     >
                         <div>
-                            <button type="submit" className="coffee-btn">
+                            <button 
+                                type="submit" 
+                                className="coffee-btn" 
+                                disabled={submitButtonDisabled} 
+                            >
                                 {submitButtonText}
                                 {submitButtonIcon && (
                                     <div className="icon">

@@ -60,6 +60,11 @@ export async function createUser(userData) {
             db.collection('topics').doc(id)
         );
 
+        const userExists = await checkUserExists(userData.username, userData.email);
+        if (userExists.exists) {
+            throw new Error(userExists.message);
+        }
+
         const formattedUserData = {
             ...userData,
             topics: topicsRefs,

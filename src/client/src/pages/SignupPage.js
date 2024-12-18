@@ -27,6 +27,9 @@ const SignupPage = () => {
 
     // Define state for validation errors
     const [errors, setErrors] = useState({});
+    
+    // Define state for button loading state (disabled)
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Joi validation schema
     const validationSchema = Joi.object({
@@ -36,10 +39,10 @@ const SignupPage = () => {
             .regex(/^[a-zA-Z0-9_-]+$/)
             .required()
             .messages({
-                "string.base": "Username must be a string",
-                "string.empty": "Username is required",
-                "string.min": "Minimum 3 characters",
-                "string.max": "Cannot exceed 30 characters",
+                "string.base":         "Username must be a string",
+                "string.empty":        "Username is required",
+                "string.min":          "Minimum 3 characters",
+                "string.max":          "Cannot exceed 30 characters",
                 "string.pattern.base": "Only characters from [a-zA-Z0-9_-] are allowed",
             }),
         email: Joi.string()
@@ -77,47 +80,51 @@ const SignupPage = () => {
     // Define input fields
     const signupFields = [
         {
-            name: "username",
-            type: "text",
+            name:        "username",
+            type:        "text",
             placeholder: "Username",
-            required: true,
-            icon: "fingerPrint",
+            required:    true,
+            icon:        "fingerPrint",
         },
         {
-            name: "email",
-            type: "email",
+            name:        "email",
+            type:        "email",
             placeholder: "Email",
-            required: true,
-            icon: "email",
+            required:    true,
+            icon:        "email",
         },
         {
-            name: "password",
-            type: "password",
+            name:        "password",
+            type:        "password",
             placeholder: "Password",
-            required: true,
-            icon: "password",
+            required:    true,
+            icon:        "password",
         },
         {
-            name: "confirmPassword",
-            type: "password",
+            name:        "confirmPassword",
+            type:        "password",
             placeholder: "Confirm Password",
-            required: true,
-            icon: "password",
+            required:    true,
+            icon:        "password",
         },
     ];
 
     // Form submission handler
     const handleSignupSubmit = async (formData) => {
+        // Prevent double-click by disabling the button
+        setIsSubmitting(true);
+
         // Validate form data using Joi
         const { error } = validationSchema.validate(formData, { abortEarly: false });
 
-        // If validation fails, set error state
+        // If validation fails, set error state and re-enable the button
         if (error) {
             const newErrors = {};
             error.details.forEach(err => {
                 newErrors[err.path[0]] = err.message;
             });
             setErrors(newErrors);
+            setIsSubmitting(false); 
             return;
         }
 
@@ -125,7 +132,7 @@ const SignupPage = () => {
         setErrors({});
 
         // Show loading toast
-        const loadingToast = toast.loading('Signup successful', {
+        const loadingToast = toast.loading('Loading', {
             position: "bottom-left",
         });
 
@@ -136,6 +143,15 @@ const SignupPage = () => {
                 formData,
             );
 
+            // Update Toast to success
+            toast.update(loadingToast, {
+                type: "success",
+                render: "Signup successful",
+                isLoading: false,
+                autoClose: 3000,
+                hideProgressBar: true,
+            });
+
             // Handle successful response
             if (response.status === 201) {
                 setTimeout(() => {
@@ -143,21 +159,23 @@ const SignupPage = () => {
                 }, 2000);
             }
         } catch (err) {
-            // Handle backend errors
             toast.update(loadingToast, {
-                render: "Signup failed",
                 type: "error",
+                render: err.response?.data?.message,
                 isLoading: false,
                 autoClose: 3000,
-				hideProgressBar: true,
-				draggable: true,
+                hideProgressBar: true,
             });
+        } finally {
+            // Re-enable the button after the request is complete
+            setTimeout(() => {
+                setIsSubmitting(false);
+            }, 3300);
         }
     };
 
     return (
         <MainLayout>
-
             <div className="signup-page">
 				{/* Signup form content */}
                 <FormComponent
@@ -170,9 +188,8 @@ const SignupPage = () => {
                     submitButtonText="Join"
                     submitButtonIcon="chevronRight"
                     errors={errors}
+                    submitButtonDisabled={isSubmitting} 
                 />
-
-                {errors.server && <p className="error-text">{errors.server}</p>}
 
                 {/* Toastify container */}
                 <ToastContainer />

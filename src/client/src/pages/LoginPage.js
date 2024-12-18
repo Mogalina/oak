@@ -27,6 +27,9 @@ const LoginPage = () => {
 
     // Define state for validation errors
     const [errors, setErrors] = useState({});
+    
+    // Define state for button loading state (disabled)
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Joi validation schema
     const validationSchema = Joi.object({
@@ -72,16 +75,20 @@ const LoginPage = () => {
 
     // Form submission handler
     const handleLoginSubmit = async (formData) => {
+        // Prevent double-click by disabling the button
+        setIsSubmitting(true);
+
         // Validate form data using Joi
         const { error } = validationSchema.validate(formData, { abortEarly: false });
     
-        // If validation fails, set error state
+        // If validation fails, set error state and re-enable the button
         if (error) {
             const newErrors = {};
             error.details.forEach(err => {
                 newErrors[err.path[0]] = err.message;
             });
             setErrors(newErrors);
+            setIsSubmitting(false); 
             return;
         }
     
@@ -89,7 +96,7 @@ const LoginPage = () => {
         setErrors({});
     
         // Show loading toastify notification
-        const loadingToast = toast.loading('Logging', {
+        const loadingToast = toast.loading('Loading', {
             position: "bottom-left",
         });
     
@@ -128,30 +135,19 @@ const LoginPage = () => {
                 }, 2000);
             }
         } catch (err) {
-            // Handle backend error responses
-            let errorMessage = 'Login failed';
-            if (err.response) {
-                switch (err.response.status) {
-                    case 400:
-                        errorMessage = 'Invalid credentials';
-                        break;
-                    case 429:
-                        errorMessage = 'Too many attempts';
-                        break;
-                    default:
-                        errorMessage = 'Something went wrong';
-                        break;
-                }
-            }
-
             // Update Toast to show error
             toast.update(loadingToast, {
                 type: "error",
-                render: errorMessage,
+                render: err.response?.data?.message,
                 isLoading: false,
                 autoClose: 3000,
                 hideProgressBar: true,
             });
+        } finally {
+            // Re-enable the button after the request is complete
+            setTimeout(() => {
+                setIsSubmitting(false);
+            }, 3300);
         }
     };
 
@@ -169,6 +165,7 @@ const LoginPage = () => {
                     submitButtonText="Let's Go"
                     submitButtonIcon={"chevronRight"}
                     errors={errors}
+                    submitButtonDisabled={isSubmitting} 
                 />
 
                 {/* Toastify container */}
