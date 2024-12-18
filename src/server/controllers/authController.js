@@ -41,7 +41,6 @@ export async function register(req, res) {
             user,
         });
     } catch (error) {
-        console.error('Error registering user:', error);
         res.status(400).json({ 
             message: error.message, 
         });
@@ -74,7 +73,6 @@ export async function login(req, res) {
             token,
         });
     } catch (error) {
-        console.error('Error logging in user:', error);
         res.status(400).json({ 
             message: error.message,
         });
@@ -95,7 +93,6 @@ export async function logout(req, res) {
             message, 
         });
     } catch (error) {
-        console.error('Error logging out user:', error);
         res.status(400).json({ 
             message: error.message, 
         });

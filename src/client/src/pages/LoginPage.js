@@ -74,7 +74,7 @@ const LoginPage = () => {
     const handleLoginSubmit = async (formData) => {
         // Validate form data using Joi
         const { error } = validationSchema.validate(formData, { abortEarly: false });
-
+    
         // If validation fails, set error state
         if (error) {
             const newErrors = {};
@@ -84,42 +84,73 @@ const LoginPage = () => {
             setErrors(newErrors);
             return;
         }
-
+    
         // Clear previous errors if validation is successful
         setErrors({});
-
-        // Show loading toast
+    
+        // Show loading toastify notification
         const loadingToast = toast.loading('Logging', {
             position: "bottom-left",
         });
-
+    
         try {
             // Send login request to the backend
             const response = await axios.post(
-                process.env.API_URL + process.env.API_LOGIN, 
+                process.env.REACT_APP_API_URL + process.env.REACT_APP_API_LOGIN, 
                 formData,
             );
-
+    
             // Handle successful response
             if (response.status === 200) {
                 // Save token to local storage
                 if (response.data.token) {
                     localStorage.setItem('authToken', response.data.token);
                 }
+    
+                // Extract user data from the response
+                const userData = response.data.user;
+    
+                // Save user data in local storage
+                localStorage.setItem('user', JSON.stringify(userData));
+
+                // Update Toast to success
+                toast.update(loadingToast, {
+                    type: "success",
+                    render: "Login successful",
+                    isLoading: false,
+                    autoClose: 3000,
+                    hideProgressBar: true,
+                });
                 
-				setTimeout(() => {
-					navigate(routes.find(route => route.key === 'profile')?.path);
-				}, 2000);
+                // Redirect to profile page
+                setTimeout(() => {
+                    navigate(routes.find(route => route.key === 'profile')?.path);
+                }, 2000);
             }
         } catch (err) {
-            // Handle backend errors
+            // Handle backend error responses
+            let errorMessage = 'Login failed';
+            if (err.response) {
+                switch (err.response.status) {
+                    case 400:
+                        errorMessage = 'Invalid credentials';
+                        break;
+                    case 429:
+                        errorMessage = 'Too many attempts';
+                        break;
+                    default:
+                        errorMessage = 'Something went wrong';
+                        break;
+                }
+            }
+
+            // Update Toast to show error
             toast.update(loadingToast, {
                 type: "error",
-                render: "Invalid credentials",
+                render: errorMessage,
                 isLoading: false,
                 autoClose: 3000,
-				hideProgressBar: true,
-			    draggable: true,
+                hideProgressBar: true,
             });
         }
     };
@@ -139,8 +170,6 @@ const LoginPage = () => {
                     submitButtonIcon={"chevronRight"}
                     errors={errors}
                 />
-
-                {errors.server && <p className="error-text">{errors.server}</p>}
 
                 {/* Toastify container */}
                 <ToastContainer />

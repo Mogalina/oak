@@ -11,11 +11,6 @@
  * - ../../firebase/firebase.js: Firebase initialization file, where Firebase Auth instance is 
  *                               imported.
  * 
- * The file exports functions for user authentication to be used in other parts of the application:
- * - registerUser: Registers a new user with email and password.
- * - loginUser:    Logs in a user with email and password.
- * - logoutUser:   Logs out the current user.
- * 
  * Author: Moghioros Eric
  * Date: 2024/12/11
  */

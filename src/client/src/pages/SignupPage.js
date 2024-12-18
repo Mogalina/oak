@@ -126,13 +126,13 @@ const SignupPage = () => {
 
         // Show loading toast
         const loadingToast = toast.loading('Signup successful', {
-            position: "top-center",
+            position: "bottom-left",
         });
 
         try {
             // Send signup request to the backend
             const response = await axios.post(
-                process.env.API_URL + process.env.API_SIGNUP, 
+                process.env.REACT_APP_API_URL + process.env.REACT_APP_API_SIGNUP, 
                 formData,
             );
 
@@ -157,6 +157,7 @@ const SignupPage = () => {
 
     return (
         <MainLayout>
+
             <div className="signup-page">
 				{/* Signup form content */}
                 <FormComponent
