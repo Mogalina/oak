@@ -1,0 +1,76 @@
+/* Imports and configuration */
+@use '../abstract/colors' as *;
+@use '../abstract/mixins' as *;
+
+/* Footer styles */
+.footer {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 30px; 
+    background-color: $full-black; 
+    color: $pastel-white; 
+    gap: 0.5rem;
+}
+
+/* Footer links list styling */
+.footer-links-list {
+    list-style-type: none; 
+    padding: 0; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media (max-width: 480px) {
+        flex-direction: column;
+    }
+
+    gap: 20px; 
+}
+
+/* Footer link item styling */
+.footer-link-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* Footer link styling */
+.footer-link {
+    color: rgba($pastel-white, 0.7);
+    text-decoration: none; 
+    display: flex;
+    align-items: center; 
+    gap: 5px;
+
+    &:hover {
+        color: $pastel-white;
+    }
+}
+
+/* Footer copyright text styles */
+.footer-copyright {
+    text-align: center; 
+    font-size: 0.875rem; 
+    color: $dark; 
+}
+
+/* Coffee button styles */
+.coffee-btn {
+    @include button-styles(10em); 
+
+    .icon {
+        @include button-icon-styles(10em);
+
+        &:hover {
+            width: calc(100% - 0.6em);
+        }
+    }
+
+    .coffee-image {
+        height: 24px;
+        width: 24px;
+        border-radius: 50%;
+    }
+}

@@ -1,0 +1,43 @@
+/* Imports and configuration */
+@use './styles/abstract/colors' as *;
+
+/* Global styles for the body */
+body {
+	margin: 0;
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 
+		'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 
+		'Helvetica Neue', sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: $full-black;
+	background-color: $full-black;
+	overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+/* Styles for code elements */
+code {
+  	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', 
+		monospace; 
+}
+
+/* Styles for html scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom Toastify styles */
+.Toastify__toast {
+    border-radius: 2.0em !important;
+	white-space: nowrap !important;
+	text-overflow: ellipsis !important;
+    overflow: hidden !important;
+	background-color: $full-black !important;
+	color: $pastel-white !important;
+	padding: 0.0rem 1.0rem 0.0rem 1.0rem !important;
+}
+
+/* Custom Toastify container styles */
+.Toastify__toast-container {
+	width: fit-content !important;
+}

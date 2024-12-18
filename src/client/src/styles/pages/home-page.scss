@@ -1,0 +1,91 @@
+/* Imports and configuration */
+@use '../abstract/colors' as *;
+
+/* Main container for the home page layout */
+.home-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+
+    a {
+        text-decoration: none;
+    }
+};
+
+/* Container for the home intro section */
+.home-intro {
+    background-image: url('../../assets/images/svgs/home-intro.svg');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    width: 100%;
+    height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: top; 
+    text-align: center; 
+    min-height: 800px;
+}
+
+/* Container for the home intro content */
+.home-intro-content {
+    z-index: 10; 
+    padding: 20px;
+    padding-top: 7.0rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.0rem;
+}
+
+/* The motto section */
+.motto {
+    font-size: clamp(1.5rem, 6.9vw, 4.0rem);
+    color: $full-black;
+    font-weight: bolder;
+}
+
+/* Container for options that are displayed */
+.content-options {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2.0rem;
+    font-family: inherit;
+}
+
+/* The description section */
+.home-description {
+    width: 100%;
+}
+
+/* Section for creating polls */
+.home-create-polls {
+    background-image: url('../../assets/images/svgs/create-polls.svg');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    width: 100%;
+    height: 100vh;
+}
+
+/* Section for sharing opinions */
+.home-share-opinion {
+    background-image: url('../../assets/images/svgs/share-opinion.svg');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    width: 100%;
+    height: 100vh;
+}
+
+/* Section for discovering */
+.home-discover {
+    background-image: url('../../assets/images/svgs/discover.svg');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    width: 100%;
+    height: 100vh;
+}

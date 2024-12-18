@@ -1,0 +1,16 @@
+/* Imports and configuration */
+@use '../abstract/colors' as *;
+
+/* Main container for the login page layout */
+.login-page {
+    background-image: url('../../assets/images/svgs/login-page.svg');
+    background-position: center; 
+    background-size: cover;
+    background-repeat: no-repeat; 
+    width: 100%;
+    height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 800px;
+}

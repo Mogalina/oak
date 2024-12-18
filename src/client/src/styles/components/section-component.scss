@@ -1,0 +1,76 @@
+/* Imports and configuration */
+@use '../abstract/colors' as *;
+@use '../abstract/mixins' as *;
+
+/* Section container */
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: flex-start; 
+    text-align: center;
+    min-height: 800px;
+    scroll-snap-type: y mandatory;
+    overflow: hidden;
+
+    @media (max-width: 768px) {
+        padding-top: 2.0rem;
+    }
+}
+
+/* Text content styles */
+.section-text {
+    margin-top: 4.2rem;
+
+    @media (max-width: 768px) {
+        margin-top: 1.8rem;
+    }
+
+    @media (max-width: 480px) {
+        margin-top: 3.0rem;
+    }
+}
+
+/* Title content styles */
+.section-title {
+    margin: 0;
+    font-size: clamp(1.5rem, 6.9vw, 4.0rem);
+    font-weight: bold;
+}
+
+/* Description content styles */
+.section-description {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    font-family: 'Open Sans', sans-serif;
+    word-wrap: break-word;
+    margin: 0 auto;
+    margin-top: 1.0rem;
+
+    @media (max-width: 768px) {
+        max-width: 400px;
+    }
+
+    @media (max-width: 480px) {
+        max-width: 300px;
+    }
+}
+
+/* Section button styles */
+.section-button {
+    margin-top: 2.1rem;
+
+    @media (max-width: 480px) {
+        margin-top: 1.6rem;
+    }
+
+    @include button-styles(0.9em);
+
+    .icon {
+        @include button-icon-styles(0.7em);
+    }
+
+    &:hover .icon {
+        width: calc(100% - 0.6em);
+    }
+}

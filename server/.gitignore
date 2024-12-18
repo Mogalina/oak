@@ -1,8 +1,0 @@
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# environmental variables
-.env
-firebase-admin-key.json

@@ -1,0 +1,86 @@
+/* Imports and configuration */
+@use './colors' as *;
+
+/**
+ * Mixin to apply a standard box shadow effect.
+
+ * Usage:
+ * @include set-box-shadow;
+ */
+@mixin set-box-shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+};
+
+/**
+ * Mixin to apply standard button styles with customizable border-radius.
+ * 
+ * Usage:
+ * @include button-styles($radius);
+ * 
+ * @param {number} $radius - The border-radius of the button (default: 10.0em).
+ */
+@mixin button-styles($radius: 10.0em) {
+    background: $full-black;
+    color: $pastel-white;
+    font-family: inherit;
+    padding: 0.35em;
+    padding-left: 1.2em;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: $radius;
+    border: none;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    box-shadow: inset 0 0 1.6em -0.6em $full-black;
+    overflow: hidden;
+    position: relative;
+    height: 2.8em;
+    padding-right: 3.3em;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+        box-shadow: inset 0 0 1.6em -0.3em $full-black;
+    }
+
+    &:active {
+        box-shadow: inset 0 0 1.6em 0 $full-black;
+    }
+};
+
+/**
+ * Mixin to apply standard icon button styles with customizable border-radius.
+ * 
+ * Usage:
+ * @include button-icon-styles($radius);
+ * 
+ * @param {number} $radius - The border-radius of the icon button (default: 10.0em).
+ */
+@mixin button-icon-styles($radius: 10.0em) {
+    background: $pastel-white;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.2em;
+    width: 2.2em;
+    border-radius: $radius;
+    box-shadow: 0.1em 0.1em 0.6em 0.2em $full-black;
+    right: 0.3em;
+    transition: all 0.3s ease;
+
+    svg {
+        width: 1.1em;
+        transition: transform 0.3s ease;
+        color: $full-black;
+    }
+
+    &:hover svg {
+        transform: translateX(0.1em);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+};
