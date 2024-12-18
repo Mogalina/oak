@@ -28,16 +28,17 @@ html {
 
 /* Custom Toastify styles */
 .Toastify__toast {
-    border-radius: 2.0em !important;
+    border-radius: 10.0em !important;
 	white-space: nowrap !important;
 	text-overflow: ellipsis !important;
     overflow: hidden !important;
 	background-color: $full-black !important;
 	color: $pastel-white !important;
 	padding: 0.0rem 1.0rem 0.0rem 1.0rem !important;
+	margin-bottom: 12px !important;
+	margin-left: 12px !important;
 }
 
-/* Custom Toastify container styles */
 .Toastify__toast-container {
 	width: fit-content !important;
 }

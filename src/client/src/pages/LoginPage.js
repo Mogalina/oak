@@ -90,7 +90,7 @@ const LoginPage = () => {
 
         // Show loading toast
         const loadingToast = toast.loading('Logging', {
-            position: "top-center",
+            position: "bottom-left",
         });
 
         try {
@@ -114,12 +114,12 @@ const LoginPage = () => {
         } catch (err) {
             // Handle backend errors
             toast.update(loadingToast, {
-                render: "Invalid credentials",
                 type: "error",
+                render: "Invalid credentials",
                 isLoading: false,
                 autoClose: 3000,
 				hideProgressBar: true,
-				draggable: true,
+			    draggable: true,
             });
         }
     };
