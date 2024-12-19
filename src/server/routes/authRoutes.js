@@ -24,7 +24,7 @@ import express from 'express';
 import { 
     register, 
     login, 
-    logout 
+    logout
 } from '../controllers/authController.js';
 import { authenticate } from '../middleware/auth/authMiddleware.js';
 import { rateLimitMiddleware } from '../middleware/auth/rateLimitMiddleware.js';

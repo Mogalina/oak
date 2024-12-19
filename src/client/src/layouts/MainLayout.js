@@ -1,6 +1,5 @@
 // Imports and configuration
 import React from 'react';
-import { Fade } from 'react-awesome-reveal';
 
 // Components
 import HeaderComponent from '../components/HeaderComponent.js';
@@ -29,11 +28,9 @@ const MainLayout = ({
 			{showHeader && <HeaderComponent />}
 
 			{/* Main Content */}
-				<Fade cascade damping={0.1} duration={500}>
-				<main className="main-content">
-					{children}
-				</main>
-			</Fade>
+			<main className="main-content">
+				{children}
+			</main>
 
 			{/* Conditional Footer */}
 			{showFooter && <FooterComponent />}
