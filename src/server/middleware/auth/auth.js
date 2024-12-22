@@ -25,7 +25,7 @@ import {
     signOut
 } from 'firebase/auth';
 import dotenv from 'dotenv';
-import { checkUserExists } from '../../models/user.js';
+import { checkUserExists, getUserByEmail } from '../../models/user.js';
 import { createUserController } from '../../controllers/userController.js';
 
 // Load environment variables from .env file
@@ -87,6 +87,7 @@ export async function loginUser(email, password) {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+        const userData = await getUserByEmail(user.email);
 
         if (!user.emailVerified) {
             throw new Error('Email not verified');
@@ -95,6 +96,7 @@ export async function loginUser(email, password) {
         const token = await userCredential.user.getIdToken();
         return {
             user: userCredential.user,
+            userData: userData,
             token, 
         };
     } catch (error) {

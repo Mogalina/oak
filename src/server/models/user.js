@@ -106,6 +106,33 @@ export async function getUserById(userId) {
 }
 
 /**
+ * Retrieves a user from the collection by their unique email address.
+ * 
+ * @param {string} userEmail - The email of the user to be retrieved.
+ * @returns {Promise<Object|null>} The user data if found, otherwise null.
+ * @throws {Error} If the operation fails.
+ */
+export async function getUserByEmail(userEmail) {
+    try {
+        const userQuerySnapshot = await db.collection('users')
+            .where('email', '==', userEmail)
+            .get();
+
+        if (!userQuerySnapshot.empty) {
+            const userDoc = userQuerySnapshot.docs[0];
+            return {
+                id: userDoc.id, 
+                ...userDoc.data(),
+            };
+        } else {
+            return null;
+        }
+    } catch (error) {
+        throw new Error('Failed to retrieve user');
+    }
+}
+
+/**
  * Updates an existing user's data in the collection.
  * 
  * @param {string} userId      - The ID of the user to be updated.

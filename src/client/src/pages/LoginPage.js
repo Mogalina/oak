@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Joi from 'joi';
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Snackbar, Alert } from '@mui/material'; 
 
 // Routes
 import routes from '../routeEndpoints.js';
@@ -30,6 +29,11 @@ const LoginPage = () => {
     
     // Define state for button loading state (disabled)
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Define state for Snackbar
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState('info');
 
     // Joi validation schema
     const validationSchema = Joi.object({
@@ -95,11 +99,11 @@ const LoginPage = () => {
         // Clear previous errors if validation is successful
         setErrors({});
     
-        // Show loading toastify notification
-        const loadingToast = toast.loading('Loading', {
-            position: "bottom-left",
-        });
-    
+        // Show loading Snackbar
+        setSnackbarMessage('Checking');
+        setSnackbarSeverity('info');
+        setSnackbarOpen(true);
+
         try {
             // Send login request to the backend
             const response = await axios.post(
@@ -115,19 +119,15 @@ const LoginPage = () => {
                 }
     
                 // Extract user data from the response
-                const userData = response.data.user;
+                const {user, userData} = response.data;
     
                 // Save user data in local storage
-                localStorage.setItem('user', JSON.stringify(userData));
+                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('userData', JSON.stringify(userData));
 
-                // Update Toast to success
-                toast.update(loadingToast, {
-                    type: "success",
-                    render: "Login successful",
-                    isLoading: false,
-                    autoClose: 3000,
-                    hideProgressBar: true,
-                });
+                // Update Snackbar to success
+                setSnackbarMessage('Login successful');
+                setSnackbarSeverity('success');
                 
                 // Redirect to profile page
                 setTimeout(() => {
@@ -135,14 +135,9 @@ const LoginPage = () => {
                 }, 2000);
             }
         } catch (err) {
-            // Update Toast to show error
-            toast.update(loadingToast, {
-                type: "error",
-                render: err.response?.data?.message,
-                isLoading: false,
-                autoClose: 3000,
-                hideProgressBar: true,
-            });
+            // Update Snackbar to show error
+            setSnackbarMessage(err.response?.data?.message || 'An error occurred');
+            setSnackbarSeverity('error');
         } finally {
             // Re-enable the button after the request is complete
             setTimeout(() => {
@@ -151,10 +146,15 @@ const LoginPage = () => {
         }
     };
 
+    // Close Snackbar
+    const handleCloseSnackbar = () => {
+        setSnackbarOpen(false);
+    };
+
     return (
         <MainLayout>
             <div className="login-page">
-				{/* Login form content */}
+                {/* Login form content */}
                 <FormComponent
                     title="Hello Friend"
                     fields={loginFields}
@@ -168,8 +168,21 @@ const LoginPage = () => {
                     submitButtonDisabled={isSubmitting} 
                 />
 
-                {/* Toastify container */}
-                <ToastContainer />
+                {/* Snackbar Alert */}
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={3000}
+                    onClose={handleCloseSnackbar}
+                >
+                    <Alert
+                        onClose={handleCloseSnackbar}
+                        severity={snackbarSeverity}
+                        sx={{ width: '100%' }}
+                        variant='filled'
+                    >
+                        {snackbarMessage}
+                    </Alert>
+                </Snackbar>
             </div>
         </MainLayout>
     );

@@ -1,0 +1,209 @@
+/* Imports and configuration */
+@use '../abstract/colors' as *;
+@use '../abstract/mixins' as *;
+
+/* Main container for the signup page layout */
+.profile-page {
+    background-image: url('../../assets/images/svgs/profile-page.svg');
+    background-position: center; 
+    background-size: cover;
+    background-repeat: no-repeat; 
+    width: 100%;
+    min-height: 100vh; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 5.0rem;
+}
+
+/* Profile card section */
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    margin-top: 6.2rem;
+    margin-bottom: 1.5rem;
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 768px) {
+        margin-top: 5.8rem;
+    }
+
+    @media (max-width: 480px) {
+        margin-top: 4.0rem;
+    }
+
+    /* Styling for the profile picture container */
+    .flower-image {
+        width: 200px;
+        height: 200px;
+        mask-image: url('../../assets/images/svgs/profile-pic-shape.svg');
+        -webkit-mask-image: url('../../assets/images/svgs/profile-pic-shape.svg');
+        mask-size: cover;
+        -webkit-mask-size: cover;
+        mask-repeat: no-repeat;
+        -webkit-mask-repeat: no-repeat;
+        mask-position: center;
+        -webkit-mask-position: center;
+        overflow: hidden;
+    }
+    
+    /* Ensures the profile picture fills the container and scales appropriately */
+    .flower-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background-color: whitesmoke;
+    }
+
+    /* Displays activity stats like polls and votes */
+    .activity-info {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 40px;
+        align-items: center;
+
+        p {
+            font-weight: bold;
+        }
+    }
+
+    /* Styling for the username displayed below the profile picture */
+    .username {
+        margin-top: 2.5rem;
+    }
+
+    /* Styling for the 'Edit Profile' button */
+    .edit-profile-button {
+        margin-top: 1.5rem;
+        @include button-styles(0.9em);
+    
+        .icon {
+            @include button-icon-styles(0.7em);
+        }
+    
+        &:hover .icon {
+            width: calc(100% - 0.6em);
+        }
+    }
+}
+
+/* Styling for polls and votes sections */
+.polls-window, .votes-window {
+    padding: 6.0rem 2.3rem 0.0rem 2.3rem;
+    background-image: url('../../assets/images/svgs/polls-window.svg');
+    background-size: contain; 
+    background-repeat: no-repeat; 
+    background-position: center;
+    aspect-ratio: 600 / 374;
+    width: 80%;
+    max-width: 800px;
+    overflow: hidden;
+
+    /* Responsive adjustments for different screen sizes */
+    @media (max-width: 1000px) {
+        width: 80%;
+        padding: 5.5rem 2.0rem 0.0rem 2.0rem;
+    }   
+
+    @media (max-width: 750px) {
+        width: 80%;
+        padding: 4.0rem 1.5rem 0.0rem 1.5rem;
+    }
+
+    @media (max-width: 500px) {
+        width: 80%;
+        padding: 3.2rem 1.5rem 0.4rem 1.5rem;
+    }
+
+    /* Header section of the polls window */
+    .polls-header {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        .title {
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .polls-options {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+    }
+    
+    /* Custom scrollbar styles for the polls container */
+    .polls-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .polls-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        height: 75%;
+        margin-top: 20px;
+        flex-grow: 1; 
+        overflow-y: auto;
+        scrollbar-width: none; 
+        -ms-overflow-style: none;
+
+        /* Styling for an empty polls message */
+        .no-polls-info {
+            align-self: center;
+            text-align: center;
+        }
+
+        @media (max-width: 450px) {
+            margin-top: 15px;
+        }
+
+        background-color: transparent;
+
+        /* Styling for individual poll buttons */
+        .poll-btn {
+            flex-shrink: 0;
+            @include button-styles(0.9em);
+
+            span {
+                text-align: left;
+                flex-grow: 1; 
+                margin-right: 15px; 
+                overflow: hidden; 
+                text-overflow: ellipsis; 
+                white-space: nowrap;
+            }
+
+            .poll-info {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                
+                .poll-votes {
+                    border-left: 2px solid $pastel-white;
+                    padding-left: 18px;
+                    margin-right: 6px;
+                }
+
+                .icon {
+                    @include button-icon-styles(0.7em);
+                }
+            
+                &:hover .icon {
+                    width: calc(100% - 0.6em);
+                }
+            }
+        }
+    }
+}

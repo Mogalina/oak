@@ -59,7 +59,7 @@ export async function login(req, res) {
     const { email, password } = req.body;
 
     try {
-        const { user, token } = await loginUser(email, password);
+        const { user, userData, token } = await loginUser(email, password);
 
         res.cookie('authToken', token, {
             httpOnly: true, 
@@ -71,6 +71,7 @@ export async function login(req, res) {
         res.status(200).json({
             message: 'Login successful',
             user,
+            userData,
             token,
         });
     } catch (error) {

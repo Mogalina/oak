@@ -1,5 +1,6 @@
 // Imports and configuration
 import React from 'react';
+import Tooltip from '@mui/material/Tooltip';
 
 /**
  * Helper function to generate an SVG icon.
@@ -34,7 +35,7 @@ const generateIcon = ({
         strokeWidth={strokeWidth}
         stroke="currentColor" 
         className={className} 
-        style={{ width: size, height: size }}
+        style={{ width: size, height: size, cursor: "pointer" }}
     >
         {fillRule && <path fillRule={fillRule} />}
         {clipRule && <path clipRule={clipRule} />}
@@ -53,12 +54,14 @@ const generateIcon = ({
  * @param {string} props.name        - The name of the icon.
  * @param {string} [props.size]      - The size of the icon.
  * @param {string} [props.className] - Custom class name for styling.
+ * @param {string} [props.tooltip]   - Tooltip text to display.
  * @returns {JSX.Element} The icon SVG element.
  */
 const Icons = ({ 
     name, 
     size = '24', 
-    className = '' 
+    className = '',
+    tooltip = ''
 }) => {
     const iconPaths = {
         home: 'M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25',
@@ -71,6 +74,7 @@ const Icons = ({
         email: "M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25",
         password: "M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z",
         fingerPrint: "M7.864 4.243A7.5 7.5 0 0 1 19.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 0 0 4.5 10.5a7.464 7.464 0 0 1-1.15 3.993m1.989 3.559A11.209 11.209 0 0 0 8.25 10.5a3.75 3.75 0 1 1 7.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 0 1-3.6 9.75m6.633-4.596a18.666 18.666 0 0 1-2.485 5.33",
+        add: "M12 4.5v15m7.5-7.5h-15",
     };
 
     const pathData = iconPaths[name];
@@ -78,11 +82,13 @@ const Icons = ({
         return null;
     }
     
-    return generateIcon({
+    const icon = generateIcon({
         pathData,
         size,
         className,
     });
+
+    return tooltip ? <Tooltip title={tooltip} arrow>{icon} </Tooltip> : icon;
 };
 
 // Export the Icons component for usage across the application

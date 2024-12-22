@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Joi from 'joi';
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Alert } from '@mui/material'; 
 
 // Routes
 import routes from '../routeEndpoints.js';
@@ -30,6 +29,11 @@ const SignupPage = () => {
     
     // Define state for button loading state (disabled)
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Define state for alert
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertSeverity, setAlertSeverity] = useState('info'); 
+    const [alertVisible, setAlertVisible] = useState(false);
 
     // Joi validation schema
     const validationSchema = Joi.object({
@@ -130,11 +134,11 @@ const SignupPage = () => {
 
         // Clear previous errors if validation is successful
         setErrors({});
-
-        // Show loading toast
-        const loadingToast = toast.loading('Loading', {
-            position: "bottom-left",
-        });
+    
+        // Show loading Alert
+        setAlertMessage('Checking');
+        setAlertSeverity('info');
+        setAlertVisible(true);
 
         try {
             // Send signup request to the backend
@@ -143,35 +147,34 @@ const SignupPage = () => {
                 formData,
             );
 
-            // Update Toast to success
-            toast.update(loadingToast, {
-                type: "success",
-                render: "Signup successful",
-                isLoading: false,
-                autoClose: 3000,
-                hideProgressBar: true,
-            });
-
             // Handle successful response
             if (response.status === 201) {
+                // Update Alert to success
+                setAlertMessage('Signup successful');
+                setAlertSeverity('success');
+                setAlertVisible(true);
+
+                // Redirect to login page
                 setTimeout(() => {
                     navigate(routes.find(route => route.key === 'login')?.path);
                 }, 2000);
             }
         } catch (err) {
-            toast.update(loadingToast, {
-                type: "error",
-                render: err.response?.data?.message,
-                isLoading: false,
-                autoClose: 3000,
-                hideProgressBar: true,
-            });
+            // Update Alert to show error
+            setAlertMessage(err.response?.data?.message || 'An error occurred');
+            setAlertSeverity('error');
+            setAlertVisible(true);
         } finally {
             // Re-enable the button after the request is complete
             setTimeout(() => {
                 setIsSubmitting(false);
             }, 3300);
         }
+    };
+
+    // Close Alert
+    const handleCloseAlert = () => {
+        setAlertVisible(false);
     };
 
     return (
@@ -191,8 +194,16 @@ const SignupPage = () => {
                     submitButtonDisabled={isSubmitting} 
                 />
 
-                {/* Toastify container */}
-                <ToastContainer />
+                {/* Alert for showing success or error message */}
+                {alertVisible && (
+                    <Alert
+                        severity={alertSeverity}
+                        sx={{ width: '100%' }}
+                        onClose={handleCloseAlert}
+                    >
+                        {alertMessage}
+                    </Alert>
+                )}
             </div>
         </MainLayout>
     );
