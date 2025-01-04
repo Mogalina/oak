@@ -70,11 +70,11 @@ export async function createUser(userData) {
             topics: topicsRefs,
         };
 
-        const userRef = await db.collection('users').add(formattedUserData);
+        const userRef = db.collection('users').doc(userData.id);
+        await userRef.set(formattedUserData);
 
         const savedUser = await userRef.get();
         return {
-            id: userRef.id,
             ...savedUser.data(),
         };
     } catch (error) {
@@ -147,6 +147,10 @@ export async function updateUser(userId, updatedData) {
         const filteredData = Object.fromEntries(
             Object.entries(updatedData).filter(([key, value]) => value !== undefined)
         );
+
+        if (Object.keys(filteredData).length === 0) {
+            throw new Error('No fields updated');
+        }
 
         if (filteredData.topics) {
             filteredData.topics = filteredData.topics.map(id =>

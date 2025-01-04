@@ -36,7 +36,7 @@ import { authenticate } from '../middleware/auth/authMiddleware.js';
 const router = express.Router();
 
 // Route for retrieving all topics
-router.get('/topics', authenticate, getAllTopicsController);
+router.get('/topics', getAllTopicsController);
 
 // Route for creating a new topic
 router.post('/topics', authenticate, createTopicController);

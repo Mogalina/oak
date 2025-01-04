@@ -13,10 +13,11 @@
  * - DELETE /api/users/:userId - Delete a user by their unique ID.
  * 
  * Dependencies:
- * - express:                              Web framework used to define and manage HTTP routes.
- * - ../controllers/userController.js:     Contains the controller functions to perform user 
- *                                         operations.
- * - ../middleware/auth/authMiddleware.js: Middleware for authenticating requests via JWT.
+ * - express:                                   Web framework used to define and manage HTTP routes.
+ * - ../controllers/userController.js:          Contains the controller functions to perform user 
+ *                                              operations.
+ * - ../middleware/auth/authMiddleware.js:      Middleware for authenticating requests via JWT.
+ * - ../middleware/auth/rateLimitMiddleware.js: Middleware for limiting login requests.
  * 
  * Author: Moghioros Eric
  * Date: 2024/12/11
@@ -31,6 +32,7 @@ import {
     deleteUserByIdController,
 } from '../controllers/userController.js';
 import { authenticate } from '../middleware/auth/authMiddleware.js';
+import { rateLimitMiddleware } from '../middleware/auth/rateLimitMiddleware.js';
 
 // Initialize the router for user routes
 const router = express.Router();
@@ -45,7 +47,7 @@ router.post('/users', createUserController);
 router.get('/users/:userId', authenticate, getUserByIdController);
 
 // Route for updating user data based on user ID
-router.put('/users/:userId', authenticate, updateUserController);
+router.put('/users/:userId', authenticate, rateLimitMiddleware, updateUserController);
 
 // Route for deleting a user based on user ID
 router.delete('/users/:userId', authenticate, deleteUserByIdController);

@@ -1,0 +1,240 @@
+/* Imports and configuration */
+@use '../abstract/colors' as *;
+@use '../abstract/mixins' as *;
+
+/* Main container for the add poll page layout */
+.add-poll-page {
+    background-image: url('../../assets/images/svgs/profile-page.svg');
+    background-position: center; 
+    background-size: cover;
+    background-repeat: no-repeat; 
+    width: 100%;
+    min-height: 100vh; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 5.0rem;
+}
+
+/* Poll card section */
+.poll-card {
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    margin-top: 6.2rem;
+    margin-bottom: 1.5rem;
+    gap: 2.0em;
+
+    /* Mui input field styling */
+    .text-field .MuiOutlinedInput-root {
+        border-width: 2px !important;
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+        background-color: transparent;
+        outline: none;
+        border-radius: 1.0rem;
+
+        &.Mui-focused {
+            border-color: $full-black !important;
+        }
+    }
+
+    .text-field .MuiOutlinedInput-root.Mui-focused fieldset {
+        border-width: 2px !important;
+        border-color: $full-black;
+    }
+
+    .text-field .MuiInputLabel-outlined {
+        &.Mui-focused, &.Mui-active {
+            color: $full-black !important;
+            padding-left: 0rem !important;
+            padding-right: 0rem !important;
+        }
+    }
+
+    .text-field textarea {
+        overflow: auto; 
+        scrollbar-color: transparent transparent; 
+        scrollbar-width: none;
+    
+        &::-webkit-scrollbar {
+            width: 0px; 
+            height: 0px;
+        }
+    
+        &::-webkit-scrollbar-thumb {
+            background: transparent;
+        }
+    }
+    
+    /* Private state switch stlying */
+    .private-switch .MuiSwitch-switchBase.Mui-checked {
+        color: $pastel-green;
+    }
+    
+    .private-switch .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+        background-color: $pastel-green;
+    }
+    
+    .private-switch .MuiSwitch-switchBase {
+        color: $pastel-red;
+    
+        &:hover {
+            background-color: rgba(244, 67, 54, 0.08);
+        }
+    }
+    
+    .private-switch .MuiSwitch-track {
+        background-color: $pastel-red;
+    }
+
+    /* Autocomplete topic list styling */
+    .topics-list {
+        .MuiInputBase-root {
+            font-size: 1rem;
+        }
+
+        .MuiInputLabel-outlined {
+            font-size: 1rem;
+        }
+    }
+
+    .topics-list .MuiTextField-root {
+        width: 500px;
+    }
+
+    /* Title styling */
+    .title {
+        font-size: clamp(1.5rem, 6.9vw, 4.0rem);
+        font-weight: bold;
+        padding: 0;
+        margin: 0;
+        margin-bottom: 1.2rem;
+    }
+
+    /* Submit button styling */
+    .submit-btn {
+        @include button-styles(10em); 
+        margin-top: 20px;
+
+        .icon {
+            @include button-icon-styles(10em);
+
+            &:hover {
+                width: calc(100% - 0.6em);
+            }
+        }
+    }
+
+    /* Values box styling */
+    .values-box {
+        width: 100%;
+        max-width: 500px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: -18px !important;
+
+        .add-value-btn {
+            margin-top: 22px;
+            width: 100%;
+            border-radius: 10.0em;
+            background-color: $full-black;
+            font-family: inherit !important;
+        }
+
+        .values-list {
+            width: 105%;
+
+            .MuiListItem-root {
+                display: flex;
+                flex-wrap: wrap;  
+                width: 100%;
+            }
+            
+            .value-item {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .value-icon {
+                    height: 16px;
+                    width: 16px;
+                }
+                
+                .value-text {
+                    word-break: break-all;
+                    overflow-wrap: break-word;
+                    max-width: 100%;
+                    white-space: normal;
+                }
+            }
+        }
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 768px) {
+        margin-top: 5.8rem;
+    }
+
+    @media (max-width: 600px) {
+        .text-field {
+            width: 90vw !important;
+        }
+
+        .values-list {
+            width: 96% !important;
+        }
+
+        .add-value-btn {
+            width: 92% !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        margin-top: 4.0rem;
+    }
+}
+
+/* Autocomplete list styling */
+.MuiAutocomplete-listbox {
+    background-color: $full-black !important;
+    color: $pastel-white !important;
+    max-height: 150px !important; 
+    overflow-y: auto;   
+    border-radius: 1.0rem;
+    @include set-box-shadow;  
+}
+
+/* Disable scroll bar */
+.MuiAutocomplete-listbox::-webkit-scrollbar {
+    width: 0;  
+    height: 0; 
+}
+
+/* Autocomplete list option styling */
+.MuiAutocomplete-option {
+    cursor: pointer;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+
+    &:hover {
+        background-color: rgba($pastel-white, 0.1) !important;
+    }
+}
+
+/* Autocomplete paper styling */
+.MuiAutocomplete-paper {
+    background-color: $full-black !important;
+    border-radius: 1.0rem !important; 
+    overflow: hidden;
+    box-shadow: none !important; 
+    margin-top: 10px;
+    max-width: 500px;
+    width: 100%;
+}

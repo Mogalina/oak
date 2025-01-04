@@ -22,7 +22,11 @@ import {
     createUserWithEmailAndPassword, 
     signInWithEmailAndPassword, 
     sendEmailVerification,
-    signOut
+    signOut,
+    EmailAuthProvider, 
+    reauthenticateWithCredential, 
+    updateEmail as firebaseUpdateEmail, 
+    updatePassword as firebaseUpdatePassword 
 } from 'firebase/auth';
 import dotenv from 'dotenv';
 import { checkUserExists, getUserByEmail } from '../../models/user.js';
@@ -45,26 +49,25 @@ export async function registerUser(username, email, password) {
             throw new Error(checkUser.message);
         }
 
-        const userData = {
-            username: username,
-            email: email,
-            password: password,
-            topics: [],
-        };
-
-        await createUserController({
-            body: userData,
-        }, {
-            status: () => ({
-                json: (data) => data,
-            }),
-        });
-
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
         await sendEmailVerification(user, {
             url: process.env.EMAIL_VERIFICATION_REDIRECT_URL,
+        });
+
+        await createUserController({
+            body: {
+                id: user.uid,
+                username: username,
+                email: email,
+                password: password,
+                topics: [],
+            }
+        }, {
+            status: () => ({
+                json: (data) => data,
+            }),
         });
 
         return userCredential.user;
@@ -119,8 +122,79 @@ export async function logoutUser() {
     try {
         await signOut(auth);
         document.cookie = 'authToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Strict;';
-        return 'Logged out successfully.';
+        return 'Logged out successfully';
     } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+/**
+ * Updates the email of the currently authenticated user.
+ * 
+ * @param {string} newEmail - The new email address.
+ * @param {string} password - The current password of the user.
+ * @returns {Promise<string>} A success message.
+ */
+export async function updateEmail(newEmail, password) {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            throw new Error('No user authenticated');
+        }
+
+        console.log(newEmail);
+        console.log(password);
+
+        const credential = EmailAuthProvider.credential(user.email, password);
+        await reauthenticateWithCredential(user, credential);
+
+        await firebaseUpdateEmail(user, newEmail);
+
+        return 'Email updated successfully';
+    } catch (error) {
+        if (error.code === 'auth/invalid-email') {
+            throw new Error('Invalid email');
+        }
+        if (error.code === 'auth/email-already-in-use') {
+            throw new Error('Email already exists');
+        }
+        if (error.code === 'auth/wrong-password') {
+            throw new Error('Invalid password');
+        }
+        throw new Error(error.message);
+    }
+}
+
+/**
+ * Updates the password of the currently authenticated user.
+ * 
+ * @param {string} currentPassword - The current password of the user.
+ * @param {string} newPassword     - The new password.
+ * @returns {Promise<string>} A success message.
+ */
+export async function updatePassword(currentPassword, newPassword) {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            throw new Error('No user authenticated');
+        }
+
+        console.log(currentPassword);
+        console.log(newPassword);
+
+        const credential = EmailAuthProvider.credential(user.email, currentPassword);
+        await reauthenticateWithCredential(user, credential);
+
+        await firebaseUpdatePassword(user, newPassword);
+
+        return 'Password updated successfully';
+    } catch (error) {
+        if (error.code === 'auth/weak-password') {
+            throw new Error('Weak password');
+        }
+        if (error.code === 'auth/wrong-password') {
+            throw new Error('Invalid password');
+        }
         throw new Error(error.message);
     }
 }

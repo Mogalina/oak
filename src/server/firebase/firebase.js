@@ -46,8 +46,11 @@ const firebaseApp = initializeApp({
     measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 });
 
-// Initialize Auth
+// Initialize Client Auth
 const auth = getAuth(firebaseApp);
 
+// Initialize Admin Auth
+const adminAuth = admin.auth();
+
 // Export the Firestore and Auth instance for use in other parts of the application
-export { db, auth };
+export { db, auth, adminAuth };

@@ -2,7 +2,7 @@
 @use '../abstract/colors' as *;
 @use '../abstract/mixins' as *;
 
-/* Main container for the signup page layout */
+/* Main container for the profile page layout */
 .profile-page {
     background-image: url('../../assets/images/svgs/profile-page.svg');
     background-position: center; 
@@ -37,26 +37,47 @@
     }
 
     /* Styling for the profile picture container */
-    .flower-image {
-        width: 200px;
-        height: 200px;
-        mask-image: url('../../assets/images/svgs/profile-pic-shape.svg');
-        -webkit-mask-image: url('../../assets/images/svgs/profile-pic-shape.svg');
-        mask-size: cover;
-        -webkit-mask-size: cover;
-        mask-repeat: no-repeat;
-        -webkit-mask-repeat: no-repeat;
-        mask-position: center;
-        -webkit-mask-position: center;
-        overflow: hidden;
-    }
-    
-    /* Ensures the profile picture fills the container and scales appropriately */
-    .flower-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        background-color: whitesmoke;
+    .profile-image-container {
+        &:hover {            
+            .flower-image {
+                opacity: 0.25;
+            }
+
+            .edit-image-icon {
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                cursor: pointer;
+            }
+        }
+
+        .edit-image-icon {
+            display: none;
+        }
+
+        .flower-image {
+            width: 200px;
+            height: 200px;
+            mask-image: url('../../assets/images/svgs/profile-pic-shape.svg');
+            -webkit-mask-image: url('../../assets/images/svgs/profile-pic-shape.svg');
+            mask-size: cover;
+            -webkit-mask-size: cover;
+            mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
+            mask-position: center;
+            -webkit-mask-position: center;
+            overflow: hidden;
+        }
+        
+        /* Ensures the profile picture fills the container and scales appropriately */
+        .flower-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background-color: whitesmoke;
+        }
     }
 
     /* Displays activity stats like polls and votes */
@@ -172,16 +193,20 @@
 
         /* Styling for individual poll buttons */
         .poll-btn {
+            width: 100%;
+            justify-content: space-between;
             flex-shrink: 0;
             @include button-styles(0.9em);
 
-            span {
-                text-align: left;
-                flex-grow: 1; 
-                margin-right: 15px; 
-                overflow: hidden; 
-                text-overflow: ellipsis; 
+            .poll-question {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 12px;
+                flex-grow: 1;
                 white-space: nowrap;
+                overflow: hidden;
             }
 
             .poll-info {
@@ -205,5 +230,105 @@
                 }
             }
         }
+    }
+}
+
+.MuiDialog-paper {
+    background-color: rgba(black, 0.85) !important;
+    color: $pastel-white !important;
+    font-family: inherit !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    padding-bottom: 15px !important;
+    overflow-y: scroll !important;
+}
+
+.MuiDialog-paper::-webkit-scrollbar {
+    display: none; 
+}
+
+.MuiDialog-paper {
+    scrollbar-width: thin; 
+    scrollbar-color: transparent transparent; 
+}
+
+/* Poll information dialog style */
+.poll-dialog {
+    .dialog-title {
+        font-size: 1.4em;
+        font-family: inherit !important;
+    }
+
+    .dialog-poll-description {
+        margin-top: 40px;
+        margin-left: 2px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 14px;
+
+        .chip {
+            color: $pastel-white;
+            padding: 5px;
+        }
+    }
+
+    .dialog-poll-topics {
+        margin-top: 30px;
+        margin-bottom: 40px;
+        gap: 14px;
+
+        .dialog-topic-chip {
+            color: $pastel-white;
+            padding: 5px;
+        }
+    }
+
+    .dialog-poll-values {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 15px;
+
+        .dialog-poll-value {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            padding-left: 16px;
+            padding-right: 16px;
+            border-radius: 10.0em;
+            font-size: 14px;
+        }
+    }
+
+    .btn-close {
+        color: $pastel-white;
+        border-radius: 10.0rem;
+        padding: 10px 20px 10px 20px;
+    }
+
+    .dialog-chart {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+/* Confirm poll deletion dialog style */
+.confirm-delete-dialog {
+    .dialog-question {
+        font-family: inherit !important;
+    }
+
+    .delete-dialog-btn {
+        color: $pastel-white !important;
+        border-radius: 10.0rem !important;
+        padding: 10px 20px 10px 20px !important;
     }
 }

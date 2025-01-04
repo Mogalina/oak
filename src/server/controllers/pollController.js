@@ -53,11 +53,14 @@ export async function createPollController(req, res) {
             ...req.body,
             question: req.body.question?.trim(),
             description: req.body.description?.trim(),
-            values: Object.fromEntries(
-                Object.entries(req.body.values).map(([key, value]) => [key.trim(), value])
-            ),
-            topics: req.body.topics?.map(topic => topic.trim()),
+            values: req.body.values.reduce((acc, value) => {
+                acc[value] = 0; 
+                return acc;
+            }, {}), 
+            topics: req.body.topics?.map(topic => topic.name.trim()),
         };
+
+        console.log(pollData);
 
         const valuesCountValidation = validateValuesCount(Object.keys(pollData.values).length);
         if (valuesCountValidation.error) {
@@ -91,19 +94,13 @@ export async function createPollController(req, res) {
             });
         }
 
-        const formattedValues = {};
-        pollData.values.forEach(value => {
-            formattedValues[value] = 0;
-        });
-
         const createdPoll = await createPoll({
             ...pollData,
-            values: formattedValues,
         });
 
         res.status(201).json({
             message: 'Poll created successfully',
-            ...createdPoll,
+            createdPoll,
         });
     } catch (error) {
         console.error('Error creating poll:', error);
@@ -231,7 +228,9 @@ export async function getPollsByCreatorController(req, res) {
 
         const polls = await getAllPollsByCreator(userId);
 
-        res.status(200).json(polls);
+        res.status(200).json({
+            polls: polls,
+        });
     } catch (error) {
         console.error('Error retrieving user polls:', error);
         res.status(500).json({ 

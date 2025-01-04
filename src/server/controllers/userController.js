@@ -37,6 +37,11 @@ import {
     validatePassword  
 } from '../middleware/validations/userValidation.js';
 import { hashPassword } from '../utils/passwordUtils.js';
+import {
+    updateEmail,
+    updatePassword
+} from '../middleware/auth/auth.js';
+import { adminAuth } from '../firebase/firebase.js';
 
 /**
  * Controller to handle retrieving all users.
@@ -205,7 +210,14 @@ export async function updateUserController(req, res) {
             });
         }
 
+        if (updatedData.email) {
+            await updateEmail(updatedData.email, updatedData.password);
+            await sendEmailVerification(currentUser);
+        }
+
         if (updatedData.password) {
+            await updatePassword(updatedData.email, updatedData.password);
+
             const hashedPassword = await hashPassword(updatedData.password);
             updatedData = {
                 ...updatedData,
@@ -214,7 +226,7 @@ export async function updateUserController(req, res) {
         }
 
         await updateUser(userId, updatedData);
-        res.status(200).json({
+        res.status(201).json({
             message: 'User updated successfully',
             updatedData,
         });

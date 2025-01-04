@@ -50,7 +50,7 @@ export const validateValuesCount = (count) => {
 export const validateTopicsCount = (count) => {
     const schema = Joi.number()
         .integer()
-        .min(0)
+        .min(1)
         .max(50)
         .required()
         .messages({

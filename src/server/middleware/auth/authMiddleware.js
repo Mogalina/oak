@@ -38,7 +38,7 @@ const JWKS_URL = 'https://www.googleapis.com/service_accounts/v1/metadata/x509/s
  * @returns {void}
  */
 export async function authenticate(req, res, next) {
-    const token = req.cookies.authToken; 
+    const token = req.cookies.authToken || req.headers.authorization?.split(' ')[1]; 
     if (!token) {
         return res.status(401).json({
             message: 'Authentication token is required',
