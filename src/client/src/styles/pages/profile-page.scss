@@ -134,6 +134,8 @@
     @media (max-width: 750px) {
         width: 80%;
         padding: 4.0rem 1.5rem 0.0rem 1.5rem;
+        background-image: none;
+        aspect-ratio: auto;
     }
 
     @media (max-width: 500px) {
@@ -160,6 +162,11 @@
             justify-content: center;
             align-items: center;
             gap: 20px;
+        }
+
+        @media (max-width: 750px) {
+            padding-bottom: 12px;
+            border-bottom: 2px solid black;
         }
     }
     
@@ -201,12 +208,15 @@
             .poll-question {
                 display: flex;
                 flex-direction: row;
-                justify-content: center;
+                justify-content: left;
                 align-items: center;
                 gap: 12px;
-                flex-grow: 1;
-                white-space: nowrap;
-                overflow: hidden;
+
+                .question {
+                    flex-grow: 1;
+                    white-space: nowrap;
+                    overflow: hidden;
+                }
             }
 
             .poll-info {
@@ -215,14 +225,8 @@
                 justify-content: center;
                 align-items: center;
                 
-                .poll-votes {
-                    border-left: 2px solid $pastel-white;
-                    padding-left: 18px;
-                    margin-right: 6px;
-                }
-
                 .icon {
-                    @include button-icon-styles(0.7em);
+                    @include button-icon-styles(0.6em);
                 }
             
                 &:hover .icon {
@@ -230,6 +234,12 @@
                 }
             }
         }
+    }
+}
+
+.polls-window {
+    @media (max-width: 750px) {
+       margin-bottom: 20px;
     }
 }
 
@@ -258,52 +268,92 @@
 
 /* Poll information dialog style */
 .poll-dialog {
-    .dialog-title {
-        font-size: 1.4em;
-        font-family: inherit !important;
-    }
+    margin-left: auto;
+    margin-right: auto;
 
-    .dialog-poll-description {
-        margin-top: 40px;
-        margin-left: 2px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 14px;
+    .poll-dialog-content {
+        max-width: 80vw;
 
-        .chip {
-            color: $pastel-white;
-            padding: 5px;
+        .dialog-title {
+            font-size: 1.4em;
+            font-family: inherit !important;
+            word-wrap: break-word;
         }
-    }
 
-    .dialog-poll-topics {
-        margin-top: 30px;
-        margin-bottom: 40px;
-        gap: 14px;
-
-        .dialog-topic-chip {
-            color: $pastel-white;
-            padding: 5px;
+        .dialog-description {
+            word-wrap: break-word;
         }
-    }
 
-    .dialog-poll-values {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 15px;
-
-        .dialog-poll-value {
+        .dialog-poll-description {
+            margin-top: 40px;
+            margin-left: 2px;
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
             align-items: center;
-            padding: 12px;
-            padding-left: 16px;
-            padding-right: 16px;
-            border-radius: 10.0em;
-            font-size: 14px;
+            gap: 14px;
+            
+            .chip {
+                color: $pastel-white;
+                padding: 5px;
+            }
+        }
+
+        .dialog-poll-topics {
+            margin-top: 30px;
+            margin-bottom: 40px;
+            gap: 14px;
+
+            .dialog-topic-chip {
+                color: $pastel-white;
+                padding: 5px;
+            }
+        }
+
+        .dialog-poll-values {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+
+            .dialog-poll-value {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px;
+                padding-left: 16px;
+                padding-right: 16px;
+                border-radius: 10.0em;
+                font-size: 14px;
+                gap: 10px;
+
+                .value-name {
+                    word-wrap: break-word !important;
+                    max-width: 80% !important;
+                }
+
+                .value-votes {
+                    flex-wrap: nowrap !important;
+                }
+            }
+        }
+
+        .dialog-chart {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            max-width: 600px !important;
+            margin-left: auto;
+            margin-right: auto;
+
+            .bar {
+                min-height: 50px !important;
+            }
+
+            svg {
+                transform: scale(1.37) !important;
+            }
         }
     }
 
@@ -311,12 +361,6 @@
         color: $pastel-white;
         border-radius: 10.0rem;
         padding: 10px 20px 10px 20px;
-    }
-
-    .dialog-chart {
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 }
 

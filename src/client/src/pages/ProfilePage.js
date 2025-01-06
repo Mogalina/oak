@@ -301,7 +301,7 @@ const ProfilePage = () => {
                                                     size="18"
                                                     tooltip={poll.private ? "Private Poll" : "Public Poll"}
                                                 />
-                                                <span>{poll.question}</span>
+                                                <span className="question">{poll.question}</span>
                                             </div>
                                         </Fade>
                                         <div className="poll-info">
@@ -400,9 +400,9 @@ const ProfilePage = () => {
                 >
                     <DialogContent>
                         {selectedPoll ? (
-                            <div>
+                            <div className="poll-dialog-content">
                                 <p className="dialog-title">{selectedPoll.question}</p>
-                                <p>{selectedPoll.description || ''}</p>
+                                <p className="dialog-description">{selectedPoll.description || ''}</p>
                                 
                                 {selectedPoll.topics && selectedPoll.topics.length > 0 ? (
                                     <div className="dialog-poll-topics">
@@ -439,8 +439,8 @@ const ProfilePage = () => {
                                                             `,
                                                         }}
                                                     >
-                                                        <span>{option}</span>
-                                                        <span>{voteCount} votes</span>
+                                                        <span className="value-name">{option}</span>
+                                                        <span className="value-votes">{voteCount} votes</span>
                                                     </div>
                                                 );
                                         })}
@@ -449,7 +449,7 @@ const ProfilePage = () => {
                                     <p>No options available</p>
                                 )}
 
-                                {/* Pie Chart Section */}
+                                {/* Bar Chart Section */}
                                 <div className="dialog-chart">
                                     <BarChart
                                         width={undefined}
@@ -460,11 +460,11 @@ const ProfilePage = () => {
                                                 const voteCount = selectedPoll.values[option];
                                                 const totalVotes = Object.values(selectedPoll.values).reduce((a, b) => a + b, 0);
                                                 const percentage = totalVotes > 0 ? ((voteCount / totalVotes) * 100).toFixed(2) : 0;
-                                                return parseFloat(percentage);
+                                                return percentage === 0 ? 0.5 : parseFloat(percentage); 
                                             }),
                                             label: 'Percentage',
-                                            valueFormatter: (value) => `${value}%`,
-                                            color: "#d76767",
+                                            valueFormatter: (value) => `${value === 0.5 ? 0 : value}%`,
+                                            color: '#d76767',
                                         },
                                         ]}
                                         xAxis={[{
@@ -478,7 +478,7 @@ const ProfilePage = () => {
                                             axisLineStyle: {
                                                 stroke: 'white', 
                                                 strokeWidth: 2, 
-                                            }
+                                            },
                                         }]}
                                         yAxis={[{
                                             tickLabelStyle: {
@@ -489,8 +489,8 @@ const ProfilePage = () => {
                                         }]}
                                         slotProps={{
                                             legend: {
-                                                hidden: true
-                                            }
+                                                hidden: true,
+                                            },
                                         }}
                                     />
                                 </div>

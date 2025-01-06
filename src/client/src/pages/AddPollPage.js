@@ -160,12 +160,12 @@ const AddPollPage = () => {
         pollOptions: Joi.array().items(
             Joi.string()
                 .min(1)
-                .max(100)
+                .max(300)
                 .messages({
                     'string.base':  'Option must be a string',
                     'string.empty': 'Options cannot be empty',
                     'string.min':   'Option must be at least 1 character',
-                    'string.max':   'Option limit is 100 characters',
+                    'string.max':   'Option limit is 300 characters',
                 })
             )
             .min(1)

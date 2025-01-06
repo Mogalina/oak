@@ -105,7 +105,7 @@
     margin-right: 13px;
     margin-top: -12px;
     width: auto; 
-    background-color: $full-black;
+    background-color: rgba($full-black, 0.95);
     @include set-box-shadow;
     padding: 1.0rem 0.5rem 1.0rem 0.5rem;
     z-index: 1000; 
