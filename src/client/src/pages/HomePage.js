@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Fade } from 'react-awesome-reveal';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // Routes
 import routes from '../routeEndpoints';
@@ -17,6 +18,26 @@ import SectionComponent from '../components/SectionComponent';
 import Icons from '../components/Icons';
 
 const HomePage = () => {
+    // Initialize navigation hook
+    const navigate = useNavigate();
+
+    // State to store user information retrieved from localStorage
+    const [user, setUser] = useState(null);
+
+    // State to store additional user data (e.g., username) from localStorage
+    const [userData, setUserData] = useState(null);
+
+    /**
+     * Effect to load user and userData from localStorage when the component mounts.
+     */
+    useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        const storedUserData = JSON.parse(localStorage.getItem('userData'));
+
+        if (storedUser) setUser(storedUser);
+        if (storedUserData) setUserData(storedUserData);
+    }, []);
+
     // Refs for each section
     const introRef = useRef(null);
     const createPollsRef = useRef(null);
@@ -89,6 +110,30 @@ const HomePage = () => {
         document.title = "Oak | Shape Opinions Together";
     }, []);
 
+    // Handler for CreatePolls button
+    const handleCreatePolls = () => {
+        const redirectRoute = routes.find(route => route.key === (user ? 'profile' : 'login'));
+        if (redirectRoute) {
+            navigate(redirectRoute.path); 
+        }
+    }
+
+    // Handler for OpinionMatters button 
+    const handleOpinionMatters = () => {
+        const redirectRoute = routes.find(route => route.key === (user ? 'add-poll' : 'login'));
+        if (redirectRoute) {
+            navigate(redirectRoute.path); 
+        }
+    }
+
+    // Handler for DIscoverOthers button
+    const handleDiscoverOthers = () => {
+        const redirectRoute = routes.find(route => route.key === (user ? 'discover' : 'login'));
+        if (redirectRoute) {
+            navigate(redirectRoute.path); 
+        }
+    }
+
     return (
         <MainLayout>
             <div className="home-page">
@@ -98,7 +143,9 @@ const HomePage = () => {
                         <Fade direction="up" cascade damping={0.1} duration={1000}>
                             <span className="motto">Shape Opinions Together</span>
                             <div className="content-options">
-                                <Link to={routes.find(route => route.key === 'login')?.path}>
+                                <Link to={routes.find(route => 
+                                    route.key === (user ? 'profile' : 'login'))?.path}
+                                >
                                     <Fade 
                                         direction="up" 
                                         cascade 
@@ -132,6 +179,7 @@ const HomePage = () => {
                             description="Create polls for personal usage or share with the community."
                             className="home-create-polls"
                             buttonText="Create"
+                            onButtonClick={handleCreatePolls}
                         />
                     </div>
                     <div ref={shareOpinionRef}>
@@ -140,6 +188,7 @@ const HomePage = () => {
                             description="Interact with others to share your ideas on different topics."
                             buttonText="Share"
                             className="home-share-opinion"
+                            onButtonClick={handleOpinionMatters}
                         />
                     </div>
                     <div ref={discoverRef}>
@@ -148,6 +197,7 @@ const HomePage = () => {
                             description="Discover different polls and let them know your opinion."
                             buttonText="Discover"
                             className="home-discover"
+                            onButtonClick={handleDiscoverOthers}
                         />
                     </div>
                 </section>

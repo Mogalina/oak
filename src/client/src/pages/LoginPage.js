@@ -1,5 +1,5 @@
 // Imports and configuration
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Joi from 'joi';
 import axios from 'axios';
@@ -18,6 +18,11 @@ import MainLayout from "../layouts/MainLayout.js";
 import '../styles/pages/login-page.scss';
 
 const LoginPage = () => {
+    // Scroll to top of the window when first open page
+    useEffect(() => {
+        window.scrollTo(0, 0); 
+    }, []);
+
     // Set document title
     document.title = 'Oak | Hello Friend';
 

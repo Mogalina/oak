@@ -45,7 +45,15 @@ const EditProfilePage = () => {
         const storedUser = JSON.parse(localStorage.getItem('user'));
         const storedUserData = JSON.parse(localStorage.getItem('userData'));
 
-        if (storedUser) setUser(storedUser);
+        if (storedUser) {
+            setUser(storedUser);
+        } else {
+            // If user is not logged in, redirect to login page
+            const goToLoginRoute = routes.find(route => route.key === 'login');
+            if (goToLoginRoute) {
+                navigate(goToLoginRoute.path); 
+            }
+        }
         if (storedUserData) setUserData(storedUserData);
     }, []);
 

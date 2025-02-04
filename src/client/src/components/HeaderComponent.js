@@ -54,7 +54,7 @@ const HeaderComponent = () => {
         },
 		{ 
             name: 'polls', 
-            link: routes.find(route => route.key === 'polls')?.path, 
+            link: routes.find(route => route.key === 'discover')?.path, 
         },
         { 
             name: 'profile', 

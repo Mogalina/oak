@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Fade } from "react-awesome-reveal";
 import { useNavigate } from "react-router-dom";
-import { PieChart, BarChart } from "@mui/x-charts";
+import { BarChart } from "@mui/x-charts";
 import { 
     Dialog, 
     DialogActions, 
@@ -30,6 +30,11 @@ import Icons from '../components/Icons.js';
 import routes from '../routeEndpoints';
 
 const ProfilePage = () => {
+    // Scroll to top of the window when first open page
+    useEffect(() => {
+        window.scrollTo(0, 0); 
+    }, []);
+
     // Initialize navigate hook
     const navigate = useNavigate();
 
@@ -72,6 +77,12 @@ const ProfilePage = () => {
         setDialogOpen(false);
     };
 
+    const handleShareClick = () => {
+        setSnackbarMessage("Poll link copied");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
+    }
+
     // Handler for EditProfile button click
     const handleEditProfileClick = () => {
         const editProfileRoute = routes.find(route => route.key === 'edit-profile');
@@ -79,6 +90,16 @@ const ProfilePage = () => {
             navigate(editProfileRoute.path); 
         }
     };
+
+    // Handler for LogOut button click
+    const handleLogOutClick = () => {
+        const goToLoginRoute = routes.find(route => route.key === 'login');
+        if (goToLoginRoute) {
+            // Remove local storage data
+            localStorage.clear();
+            navigate(goToLoginRoute.path); 
+        }
+    }
 
     // Handler for AddPoll button click
     const handleAddPollClick = () => {
@@ -109,7 +130,15 @@ const ProfilePage = () => {
         const storedUser = JSON.parse(localStorage.getItem('user'));
         const storedUserData = JSON.parse(localStorage.getItem('userData'));
 
-        if (storedUser) setUser(storedUser);
+        if (storedUser) {
+            setUser(storedUser);
+        } else {
+            // If user is not logged in, redirect to login page
+            const goToLoginRoute = routes.find(route => route.key === 'login');
+            if (goToLoginRoute) {
+                navigate(goToLoginRoute.path); 
+            }
+        }
         if (storedUserData) setUserData(storedUserData);
     }, []);
 
@@ -238,14 +267,24 @@ const ProfilePage = () => {
                             <p className="votes">{votes?.length || 0} votes</p>
                         </div>
                     </Fade>
-                    <Fade direction="up" cascade damping={0.1} duration={1000} delay={250}>
-                        <button className="edit-profile-button" onClick={handleEditProfileClick}>
-                            Edit Profile
-                            <div className="icon">
-                                <Icons name="arrowRight" size="24" />
-                            </div>
-                        </button>
-                    </Fade>
+                    <div className='profile-options'>
+                        <Fade direction="up" cascade damping={0.1} duration={1000} delay={250}>
+                            <button className="edit-profile-button" onClick={handleEditProfileClick}>
+                                Edit Profile
+                                <div className="icon">
+                                    <Icons name="arrowRight" size="24" />
+                                </div>
+                            </button>
+                        </Fade>
+                        <Fade direction="up" cascade damping={0.1} duration={1000} delay={250}>
+                            <button className="edit-profile-button" onClick={handleLogOutClick}>
+                                Log Out
+                                <div className="icon">
+                                    <Icons name="arrowRight" size="24" />
+                                </div>
+                            </button>
+                        </Fade>
+                    </div>
                 </section>
 
                 {/* Polls section */}
@@ -358,7 +397,7 @@ const ProfilePage = () => {
                                         </Fade>
                                         <div className="poll-info">
                                             <Fade 
-                                                key={vote.pollId} 
+                                                key={vote.pollId}
                                                 direction="up" 
                                                 duration={500} 
                                                 delay={index * 100 + 200}
@@ -514,7 +553,7 @@ const ProfilePage = () => {
                     </DialogContent>
                     <DialogActions>
                         <Button 
-                            onClick={handleDialogClose} 
+                            onClick={handleShareClick} 
                             color="primary"
                             className="btn-close"
                         >

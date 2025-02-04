@@ -1,0 +1,52 @@
+/* Imports and configuration */
+@use '../abstract/colors' as *;
+
+/* Main container for the discover page layout */
+.discover-page {
+    background-color: $pastel-orange;
+    width: 100%;
+    height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 800px;
+    padding-top: 100px;
+}
+
+.search-polls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+
+    .search-polls-field {
+        max-width: 500px;
+        width: 82vw !important;
+        border: none;
+        background-color: transparent;
+        border-bottom: 1px solid $full-black;
+        font-family: inherit !important;
+        font-size: 14px !important;
+        padding-bottom: 6px;
+        padding-left: 0;
+        padding-right: 0;
+
+        &:focus, &:active {
+            outline: none;
+            border-color: $full-black;
+            color: $full-black;
+        }
+    }
+
+    .search-icon {
+        margin-left: -16px;
+        margin-bottom: 3px;
+    }
+}
+
+/* Styles for placeholder text inside form inputs */
+::placeholder {
+    color: rgba($full-black, 0.6);
+}
+

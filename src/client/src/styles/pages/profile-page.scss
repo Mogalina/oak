@@ -98,17 +98,24 @@
         margin-top: 2.5rem;
     }
 
-    /* Styling for the 'Edit Profile' button */
-    .edit-profile-button {
-        margin-top: 1.5rem;
-        @include button-styles(0.9em);
-    
-        .icon {
-            @include button-icon-styles(0.7em);
-        }
-    
-        &:hover .icon {
-            width: calc(100% - 0.6em);
+    .profile-options {
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+
+        /* Styling for the 'Edit Profile' button */
+        .edit-profile-button {
+            margin-top: 1.5rem;
+            width: 164px;
+            @include button-styles(0.9em);
+        
+            .icon {
+                @include button-icon-styles(0.7em);
+            }
+        
+            &:hover .icon {
+                width: calc(100% - 0.6em);
+            }
         }
     }
 }

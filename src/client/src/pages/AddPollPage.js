@@ -31,6 +31,11 @@ import routes from '../routeEndpoints.js';
 import '../styles/pages/add-poll-page.scss';
 
 const AddPollPage = () => {
+    // Scroll to top of the window when first open page
+    useEffect(() => {
+        window.scrollTo(0, 0); 
+    }, []);
+
     // Initialize navigation hook
     const navigate = useNavigate();
 
@@ -52,6 +57,12 @@ const AddPollPage = () => {
 
         if (storedUser) {
             setUser(storedUser);
+        } else {
+            // If user is not logged in, redirect to login page
+            const goToLoginRoute = routes.find(route => route.key === 'login');
+            if (goToLoginRoute) {
+                navigate(goToLoginRoute.path); 
+            }
         }
         if (storedUserData) {
             setUserData(storedUserData);
